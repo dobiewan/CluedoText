@@ -6,7 +6,11 @@ package cluedogame.sqaures;
  * @author Sarah
  *
  */
-public class GridSquare implements SteppableSquare {
+public class GridSquare extends Square {
+	
+	public GridSquare(){
+		super(true);
+	}
 
 	@Override
 	public char boardChar() {

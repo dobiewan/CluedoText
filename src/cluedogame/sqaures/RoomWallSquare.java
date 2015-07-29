@@ -2,11 +2,12 @@ package cluedogame.sqaures;
 
 import cluedogame.RoomType;
 
-public class RoomWallSquare implements Square {
+public class RoomWallSquare extends Square {
 
 RoomType room;
 	
 	public RoomWallSquare(RoomType room){
+		super(false);
 		this.room = room;
 	}
 	

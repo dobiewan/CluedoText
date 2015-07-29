@@ -2,11 +2,12 @@ package cluedogame.sqaures;
 
 import cluedogame.RoomType;
 
-public class ShortcutSquare implements SteppableSquare {
+public class ShortcutSquare extends Square {
 	
 	private RoomType toRoom;
 	
 	public ShortcutSquare(RoomType toRoom){
+		super(true);
 		this.toRoom = toRoom;
 	}
 	

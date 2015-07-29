@@ -5,12 +5,18 @@ package cluedogame.sqaures;
  * @author Sarah
  *
  */
-public interface Square {
+public abstract class Square {
+	
+	protected boolean steppable; // true if a player can step on it
+	
+	public Square(boolean steppable){
+		this.steppable = steppable;
+	}
 	
 	/**
 	 * Returns the character that will represent this square on
 	 * the board.
 	 * @return
 	 */
-	public char boardChar();
+	public abstract char boardChar();
 }

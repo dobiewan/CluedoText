@@ -6,7 +6,11 @@ package cluedogame.sqaures;
  * @author Sarah
  *
  */
-public class BlankSquare implements Square {
+public class BlankSquare extends Square {
+
+	public BlankSquare() {
+		super(false);
+	}
 
 	@Override
 	public char boardChar() {

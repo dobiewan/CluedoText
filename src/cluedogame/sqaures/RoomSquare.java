@@ -7,11 +7,12 @@ import cluedogame.RoomType;
  * @author Sarah
  *
  */
-public class RoomSquare implements SteppableSquare {
+public class RoomSquare extends Square {
 	
 	RoomType room;
 	
 	public RoomSquare(RoomType room){
+		super(true);
 		this.room = room;
 	}
 	

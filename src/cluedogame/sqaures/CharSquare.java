@@ -7,11 +7,12 @@ package cluedogame.sqaures;
  * @author Sarah
  *
  */
-public class LetterSquare implements Square {
+public class CharSquare extends Square {
 
 	private char letter;
 	
-	public LetterSquare(char letter){
+	public CharSquare(char letter){
+		super(false);
 		this.letter = letter;
 	}
 	
