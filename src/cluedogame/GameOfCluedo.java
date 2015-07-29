@@ -15,7 +15,6 @@ public class GameOfCluedo {
 	public GameOfCluedo(){
 		setupCards();
 		setMurderCards();
-		players = new LinkedList<Player>();
 	}
 	
 	/**
@@ -80,6 +79,10 @@ public class GameOfCluedo {
 	
 	public Board getBoard(){
 		return board;
+	}
+	
+	public void setPlayers(Queue<Player> players){
+		this.players = players;
 	}
 	
 }

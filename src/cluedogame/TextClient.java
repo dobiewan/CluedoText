@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
-import swen221.monopoly.Location;
-import swen221.monopoly.Player;
 import cluedogame.*;
 
 public class TextClient {
@@ -49,18 +49,18 @@ public class TextClient {
 	/**
 	 * Collect player details from user input
 	 */
-	private static ArrayList<Player> inputPlayers(int nplayers) {
+	private static LinkedList<Player> inputPlayers(int nplayers) {
 		// create a list of possible characters
-		ArrayList<String> characters = listOfCharacters();
+		LinkedList<String> characters = listOfCharacters();
 		
 		// list characters to choose from
 		System.out.println("The characters you may choose from are:");
 		printOptions(characters);
 
-		ArrayList<Player> players = new ArrayList<Player>();
+		LinkedList<Player> players = new LinkedList<Player>();
 
 		// ask each player for details
-		for (int i = 0; i != nplayers; ++i) {
+		for (int i = 1; i <= nplayers; i++) {
 			String chosenCharacter = inputString("Player #" + i + " character?");
 			// check validity of character
 			if (!characters.contains(chosenCharacter)) {
@@ -72,7 +72,7 @@ public class TextClient {
 			}
 			
 			characters.remove(chosenCharacter); // the chosen character is no longer available
-			players.add(new Player(chosenCharacter, (char)i)); // create the Player object
+			players.add(new Player(chosenCharacter, Character.forDigit(1, 10))); // create the Player object
 		}
 		return players;
 	}
@@ -81,8 +81,8 @@ public class TextClient {
 	 * Creates a list of simplified versions of the character names which
 	 * players can choose from.
 	 */
-	private static ArrayList<String> listOfCharacters(){
-		ArrayList<String> characters = new ArrayList<String>();
+	private static LinkedList<String> listOfCharacters(){
+		LinkedList<String> characters = new LinkedList<String>();
 		
 		characters.add("Scarlett");
 		characters.add("Mustard");
@@ -97,7 +97,7 @@ public class TextClient {
 	/**
 	 * Prints out a list of some options.
 	 */
-	private static void printOptions(List<String> characters){
+	private static void printOptions(Queue<String> characters){
 		// print out each character name
 		boolean firstTime = true;
 		for (String s : characters) {
@@ -119,13 +119,13 @@ public class TextClient {
 
 		// input player info
 		int nplayers = inputNumber("How many players?");
-		ArrayList<Player> players = inputPlayers(nplayers,
-				game.getBoard().getStartLocation());
+		LinkedList<Player> players = inputPlayers(nplayers);
+		game.setPlayers(players);
 
 		// now, begin the game!
 		int turn = 1;
 		Random dice = new Random();
-		while (1 == 1) { // loop forever
+		while (true) { // loop forever
 			System.out.println("\n********************");
 			System.out.println("***** TURN " + turn + " *******");
 			System.out.println("********************\n");
