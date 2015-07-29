@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
+import cluedogame.players.Player;
 import cluedogame.sqaures.*;
 
 public class Board {
@@ -125,19 +126,25 @@ public class Board {
 	/**
 	 * 'Draws' the board on the console.
 	 */
-	public void draw(){
+	public void draw(Queue<Player> players){
+		// replace squares for player positions
+		Square[][] drawBoard = board;
+		for (Player p : players){
+			drawBoard[p.column()][p.row()] = new LetterSquare(p.ID());
+		}
+		
 		// iterate over every row
-		for(int r=0; r<board.length; r++){
+		for(int r=0; r<drawBoard.length; r++){
 			// don't draw a wall if the next square is blank or a letter
 			boolean drawnBlank = false;
-			if(board[r][0] instanceof BlankSquare){
+			if(drawBoard[r][0] instanceof BlankSquare){
 				System.out.print(" ");
 			} else {
 				System.out.print("|");
 			}
 			// iterate over every column in r
-			for(int c=0; c<board[0].length; c++){
-				Square sq = board[r][c];
+			for(int c=0; c<drawBoard[0].length; c++){
+				Square sq = drawBoard[r][c];
 				// don't draw a wall if this square is blank or a letter
 				if(sq instanceof BlankSquare || sq instanceof LetterSquare){
 					if(drawnBlank){
@@ -167,6 +174,8 @@ public class Board {
 		File f = new File("boardFile.txt");
 		Board b = new Board();
 		b.parse(f);
-		b.draw();
+		Queue<Player> players = new LinkedList<Player>();
+		players.offer(new Player(PlayerType.MISS_SCARLETT, '1', 3, 3));
+		b.draw(players);
 	}
 }
