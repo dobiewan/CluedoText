@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-import cluedogame.players.Player;
 import cluedogame.sqaures.*;
 
 public class Board {
@@ -49,8 +48,8 @@ public class Board {
 		switch(code){
 		case '/' : sq = new BlankSquare(); break;
 		case '_' : sq = new GridSquare(); break;
-		case '?' : sq = new LetterSquare('?'); break;
-		case '#' : sq = new LetterSquare(title.poll()); break;
+		case '?' : sq = new CharSquare('?'); break;
+		case '#' : sq = new CharSquare(title.poll()); break;
 		case '~' : sq = new ShortcutSquare(shortcuts.poll()); break;
 		case '*' : sq = new StarterSquare(players.poll()); break;
 		case 'K' : sq = new RoomWallSquare(RoomType.KITCHEN); break;
@@ -130,7 +129,7 @@ public class Board {
 		// replace squares for player positions
 		Square[][] drawBoard = board;
 		for (Player p : players){
-			drawBoard[p.column()][p.row()] = new LetterSquare(p.ID());
+			drawBoard[p.column()][p.row()] = new CharSquare(p.ID());
 		}
 		
 		// iterate over every row
@@ -146,7 +145,7 @@ public class Board {
 			for(int c=0; c<drawBoard[0].length; c++){
 				Square sq = drawBoard[r][c];
 				// don't draw a wall if this square is blank or a letter
-				if(sq instanceof BlankSquare || sq instanceof LetterSquare){
+				if(sq instanceof BlankSquare || sq instanceof CharSquare){
 					if(drawnBlank){
 						System.out.print(" ");
 					}
