@@ -1,14 +1,18 @@
 package cluedogame.cards;
 
-import cluedogame.WeaponType;
+public class WeaponCard extends Card {
 
-public class WeaponCard extends Card{
-	
-	private WeaponType weapon;
-
-	public WeaponCard(WeaponType weapon) {
-		super();
-		this.weapon = weapon;
+	public WeaponCard(String name) {
+		super(name);
 	}
 	
+	public WeaponCard(String name, boolean partOfMurder){
+		super(name, partOfMurder);
+	}
+
+	@Override
+	public String getName() {
+		return "Wpn:" + name;
+	}
+
 }

@@ -1,15 +1,18 @@
 package cluedogame.cards;
 
-import cluedogame.RoomType;
-
 public class RoomCard extends Card {
 
-	private RoomType room;
-	
-	public RoomCard(RoomType room) {
-		super();
-		this.room = room;
+	public RoomCard(String name) {
+		super(name);
 	}
-	
-	
+
+	public RoomCard(String name, boolean partOfMurder) {
+		super(name, partOfMurder);
+	}
+
+	@Override
+	public String getName() {
+		return "Rm:" + name;
+	}
+
 }
