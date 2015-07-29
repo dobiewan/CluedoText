@@ -10,6 +10,7 @@ public class GameOfCluedo {
 	private List<Card> weaponCards;
 	private Card[] murderCards = new Card[3];
 	private Queue<Player> players;
+	private Board board;
 	
 	public GameOfCluedo(){
 		setupCards();
@@ -75,6 +76,10 @@ public class GameOfCluedo {
 		// choose a weapon card
 		randomIndex = (int) (Math.random()*(weaponCards.size()-1));
 		this.murderCards[2] = this.weaponCards.get(randomIndex);
+	}
+	
+	public Board getBoard(){
+		return board;
 	}
 	
 }

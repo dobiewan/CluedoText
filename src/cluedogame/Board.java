@@ -30,7 +30,7 @@ public class Board {
 				for(int c=0; c < board[0].length; c++){
 					char code = line.charAt(c); // get the character in the file
 					// determine the Square corresponding to the code
-					Square sq = squareTypeFromCode(code, title, players, shortcuts);
+					Square sq = squareTypeFromCode(code, title, /*players,*/ shortcuts);
 					// add the square to the board
 					board[r][c] = sq;
 				}
@@ -43,7 +43,7 @@ public class Board {
 	}
 
 	private Square squareTypeFromCode(char code, Queue<Character> title,
-			Queue<PlayerType> players, Queue<RoomType> shortcuts) {
+			/*Queue<PlayerType> players,*/ Queue<RoomType> shortcuts) {
 		Square sq = null;
 		switch(code){
 		case '/' : sq = new BlankSquare(); break;
@@ -51,7 +51,7 @@ public class Board {
 		case '?' : sq = new CharSquare('?'); break;
 		case '#' : sq = new CharSquare(title.poll()); break;
 		case '~' : sq = new ShortcutSquare(shortcuts.poll()); break;
-		case '*' : sq = new StarterSquare(players.poll()); break;
+		case '*' : sq = new StarterSquare(/*players.poll()*/); break;
 		case 'K' : sq = new RoomWallSquare(RoomType.KITCHEN); break;
 		case 'B' : sq = new RoomWallSquare(RoomType.BALLROOM); break;
 		case 'C' : sq = new RoomWallSquare(RoomType.CONSERVATORY); break;
@@ -174,7 +174,7 @@ public class Board {
 		Board b = new Board();
 		b.parse(f);
 		Queue<Player> players = new LinkedList<Player>();
-		players.offer(new Player(PlayerType.MISS_SCARLETT, '1', 3, 3));
+		players.offer(new Player("Miss Scarlett", '1'));
 		b.draw(players);
 	}
 }
