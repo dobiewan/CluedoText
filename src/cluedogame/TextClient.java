@@ -108,6 +108,7 @@ public class TextClient {
 			firstTime = false;
 			System.out.print("\"" + s + "\"");
 		}
+		System.out.println();
 	}
 	
 	public static void main(String args[]) {
@@ -135,22 +136,19 @@ public class TextClient {
 					System.out.println("\n********************\n");
 				}
 				firstTime = false;
-				int roll = dice.nextInt(10) + 2;
+				int roll = dice.nextInt(6) + 1;
 				System.out.println(player.getName() + " rolls a " + roll + ".");
-				// now, move player and deduct rent
-				movePlayer(player, roll, game);
-				// now, give player options to sell/buy etc
+				//TODO move player (make method)
+				// display player's options
 				playerOptions(player, game);
-				// now, is player still in game?
-				if (player.getBalance() < 0) {
-					// player is out of the game
-					System.out.println("\n Game over for " + player.getName()
-							+ " --- insufficient funds!");
-					players.remove(player);
-					break;
-				}
+				// TODO escape route when accusation made (make accuse method)
 			}
 			turn++;
 		}
+	}
+
+	private static void playerOptions(Player player, GameOfCluedo game) {
+		// TODO Auto-generated method stub
+		
 	}
 }

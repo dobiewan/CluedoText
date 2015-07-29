@@ -39,6 +39,10 @@ public class Player {
 		return number;
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
 	/**
 	 * Converts a simplified name, (eg. "Scarlett") into the full name,
 	 * (eg. "Miss Scarlett").
