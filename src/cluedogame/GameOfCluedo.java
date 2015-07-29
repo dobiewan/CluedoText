@@ -3,7 +3,6 @@ package cluedogame;
 import java.util.*;
 
 import cluedogame.cards.*;
-import cluedogame.players.*;
 
 public class GameOfCluedo {
 	private List<Card> characterCards;
@@ -24,25 +23,40 @@ public class GameOfCluedo {
 	 * @return A shuffled List of all game cards.
 	 */
 	private void setupCards(){
+		
 		// add character cards
 		List<Card> cCards = new ArrayList<Card>();
-		for(PlayerType p : PlayerType.values()){
-			cCards.add(new CharacterCard(p));
-		}
+		cCards.add(new CharacterCard("Miss Scarlett"));
+		cCards.add(new CharacterCard("Colonel Mustard"));
+		cCards.add(new CharacterCard("Mrs White"));
+		cCards.add(new CharacterCard("Reverend Green"));
+		cCards.add(new CharacterCard("Mrs Peacock"));
+		cCards.add(new CharacterCard("Professor Plum"));
 		Collections.shuffle(cCards);
 		this.characterCards = cCards;
+		
 		// add room cards
 		List<Card> rCards = new ArrayList<Card>();
-		for(RoomType r : RoomType.values()){
-			rCards.add(new RoomCard(r));
-		}
+		rCards.add(new RoomCard("Conservatory"));
+		rCards.add(new RoomCard("Billiard Room"));
+		rCards.add(new RoomCard("Library"));
+		rCards.add(new RoomCard("Study"));
+		rCards.add(new RoomCard("Hall"));
+		rCards.add(new RoomCard("Loungey"));
+		rCards.add(new RoomCard("Dining Room"));
+		rCards.add(new RoomCard("Kitchen"));
+		rCards.add(new RoomCard("Ball Room"));
 		Collections.shuffle(rCards);
 		this.roomCards = rCards;
+		
 		// add weapon cards
 		List<Card> wCards = new ArrayList<Card>();
-		for(WeaponType w : WeaponType.values()){
-			wCards.add(new WeaponCard(w));
-		}
+		wCards.add(new WeaponCard("Candlestick"));
+		wCards.add(new WeaponCard("Dagger"));
+		wCards.add(new WeaponCard("Lead Pipe"));
+		wCards.add(new WeaponCard("Revolver"));
+		wCards.add(new WeaponCard("Rope"));
+		wCards.add(new WeaponCard("Spanner"));
 		Collections.shuffle(wCards);
 		this.weaponCards = wCards;
 	}
