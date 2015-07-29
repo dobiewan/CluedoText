@@ -8,14 +8,30 @@ import cluedogame.cards.*;
 public class Player {
 	
 	private PlayerType name; // which character playing as
-	private int number; // the number displayed on the board
+	private char number; // the number displayed on the board
 	private Set<Card> hand; // cards in the player's hand
-	private Set<Card> cardsSeen; // cards the player has seen. includes all cards in hand.
 	
-	public Player(PlayerType name, int number) {
+	private int cPosition;
+	private int rPosition;
+	
+	public Player(PlayerType name, char number, int startC, int startR) {
 		super();
 		this.name = name;
 		this.number = number;
+		this.cPosition = startC;
+		this.rPosition = startR;
+	}
+	
+	public int column(){
+		return cPosition;
+	}
+	
+	public int row(){
+		return rPosition;
+	}
+	
+	public char ID(){
+		return number;
 	}
 	
 	
