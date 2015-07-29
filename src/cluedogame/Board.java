@@ -1,0 +1,172 @@
+package cluedogame;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+import cluedogame.sqaures.*;
+
+public class Board {
+	
+	private Square[][] board = new Square[25][24];
+	
+	/**
+	 * Loads a board from a given file.
+	 * @param file The file containing the board data.
+	 */
+	public void parse(File file){
+		try{
+			Scanner s = new Scanner(file);
+			// create queues of special squares
+			Queue<Character> title = titleChars();
+			Queue<PlayerType> players = startPlayers();
+			Queue<RoomType> shortcuts = shortcutRooms();
+			// iterate over each row
+			for(int r = 0; r<board.length; r++){
+				String line = s.nextLine();
+				// parse each column in row r
+				for(int c=0; c < board[0].length; c++){
+					char code = line.charAt(c); // get the character in the file
+					// determine the Square corresponding to the code
+					Square sq = squareTypeFromCode(code, title, players, shortcuts);
+					// add the square to the board
+					board[r][c] = sq;
+				}
+			}
+				
+			
+		} catch(IOException e){
+			System.out.println("Error loading file: "+ e.getMessage());
+		}
+	}
+
+	private Square squareTypeFromCode(char code, Queue<Character> title,
+			Queue<PlayerType> players, Queue<RoomType> shortcuts) {
+		Square sq = null;
+		switch(code){
+		case '/' : sq = new BlankSquare(); break;
+		case '_' : sq = new GridSquare(); break;
+		case '?' : sq = new LetterSquare('?'); break;
+		case '#' : sq = new LetterSquare(title.poll()); break;
+		case '~' : sq = new ShortcutSquare(shortcuts.poll()); break;
+		case '*' : sq = new StarterSquare(players.poll()); break;
+		case 'K' : sq = new RoomWallSquare(RoomType.KITCHEN); break;
+		case 'B' : sq = new RoomWallSquare(RoomType.BALLROOM); break;
+		case 'C' : sq = new RoomWallSquare(RoomType.CONSERVATORY); break;
+		case 'P' : sq = new RoomWallSquare(RoomType.BILLIARD_ROOM); break;
+		case 'L' : sq = new RoomWallSquare(RoomType.LIBRARY); break;
+		case 'S' : sq = new RoomWallSquare(RoomType.STUDY); break;
+		case 'H' : sq = new RoomWallSquare(RoomType.HALL); break;
+		case 'G' : sq = new RoomWallSquare(RoomType.LOUNGE); break;
+		case 'D' : sq = new RoomWallSquare(RoomType.DINING_ROOM); break;
+		case 'k' : sq = new RoomSquare(RoomType.KITCHEN); break;
+		case 'b' : sq = new RoomSquare(RoomType.BALLROOM); break;
+		case 'c' : sq = new RoomSquare(RoomType.CONSERVATORY); break;
+		case 'p' : sq = new RoomSquare(RoomType.BILLIARD_ROOM); break;
+		case 'l' : sq = new RoomSquare(RoomType.LIBRARY); break;
+		case 's' : sq = new RoomSquare(RoomType.STUDY); break;
+		case 'h' : sq = new RoomSquare(RoomType.HALL); break;
+		case 'g' : sq = new RoomSquare(RoomType.LOUNGE); break;
+		case 'd' : sq = new RoomSquare(RoomType.DINING_ROOM); break;
+		}
+		return sq;
+	}
+	
+	/**
+	 * Creates a queue containing each letter of the word CLUEDO.
+	 * @return A queue containing the letters (in order) C, L,
+	 * U, E, D, O
+	 */
+	private Queue<Character> titleChars(){
+		Queue<Character> title = new LinkedList<Character>();
+		title.add('C');
+		title.add('L');
+		title.add('U');
+		title.add('E');
+		title.add('D');
+		title.add('O');
+		return title;
+	}
+	
+	/**
+	 * Creates a queue containing the PlayerType at each player
+	 * start position, in the order that they will be parsed.
+	 * @return A queue containing the PlayerType at each player
+	 * start position, in the order that they will be parsed.
+	 */
+	private Queue<PlayerType> startPlayers(){
+		Queue<PlayerType> players = new LinkedList<PlayerType>();
+		players.add(PlayerType.MRS_WHITE);
+		players.add(PlayerType.REV_GREEN);
+		players.add(PlayerType.MRS_PEACOCK);
+		players.add(PlayerType.COL_MUSTARD);
+		players.add(PlayerType.PROF_PLUM);
+		players.add(PlayerType.MISS_SCARLETT);
+		return players;
+	}
+	
+	/**
+	 * Creates a queue containing the RoomType at each shortcut
+	 * location, in the order that they will be parsed.
+	 * @return A queue containing the RoomType at each shortcut
+	 * location, in the order that they will be parsed.
+	 */
+	private Queue<RoomType> shortcutRooms(){
+		Queue<RoomType> rooms = new LinkedList<RoomType>();
+		rooms.add(RoomType.STUDY);
+		rooms.add(RoomType.LOUNGE);
+		rooms.add(RoomType.CONSERVATORY);
+		rooms.add(RoomType.KITCHEN);
+		return rooms;
+	}
+	
+	/**
+	 * 'Draws' the board on the console.
+	 */
+	public void draw(){
+		// iterate over every row
+		for(int r=0; r<board.length; r++){
+			// don't draw a wall if the next square is blank or a letter
+			boolean drawnBlank = false;
+			if(board[r][0] instanceof BlankSquare){
+				System.out.print(" ");
+			} else {
+				System.out.print("|");
+			}
+			// iterate over every column in r
+			for(int c=0; c<board[0].length; c++){
+				Square sq = board[r][c];
+				// don't draw a wall if this square is blank or a letter
+				if(sq instanceof BlankSquare || sq instanceof LetterSquare){
+					if(drawnBlank){
+						System.out.print(" ");
+					}
+					System.out.print(sq.boardChar());
+					drawnBlank = true;
+					continue;
+				}
+				// if we've just drawn a blank square, draw a wall
+				if(drawnBlank){
+					System.out.print("|");
+					drawnBlank = false;
+				}
+				// print this square's symbol
+				System.out.print(sq.boardChar());
+				// draw a wall
+				System.out.print("|");
+			}
+			System.out.println();
+		}
+	}
+	
+	
+	public static void main(String[] args){
+//		new BoardDrawer().drawBoard();
+		File f = new File("boardFile.txt");
+		Board b = new Board();
+		b.parse(f);
+		b.draw();
+	}
+}
