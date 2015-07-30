@@ -1,14 +1,17 @@
 package cluedogame.sqaures;
 
+import cluedogame.Board;
 import cluedogame.RoomType;
 
 public class ShortcutSquare extends Square {
 	
 	private RoomType toRoom;
+	private ShortcutSquare toSquare;
 	
-	public ShortcutSquare(RoomType toRoom){
+	public ShortcutSquare(RoomType toRoom, Board board){
 		super(true);
 		this.toRoom = toRoom;
+		this.toSquare = RoomSquare.findShortcut(toRoom, board);
 	}
 	
 	public RoomType toRoom(){

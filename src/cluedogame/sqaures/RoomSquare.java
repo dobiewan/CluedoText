@@ -1,5 +1,6 @@
 package cluedogame.sqaures;
 
+import cluedogame.Board;
 import cluedogame.RoomType;
 
 /**
@@ -10,10 +11,29 @@ import cluedogame.RoomType;
 public class RoomSquare extends Square {
 	
 	RoomType room;
+	ShortcutSquare shortcut; // the shortcut square in this room, or null if there is none
 	
-	public RoomSquare(RoomType room){
+	public RoomSquare(RoomType room, Board board){
 		super(true);
 		this.room = room;
+		this.shortcut = findShortcut(room, board);
+	}
+	
+	/**
+	 * Finds the shortcut square for the given room.
+	 * @param room The room which may contain a shortcut
+	 * @param board The board we are playing on
+	 * @return The ShortcutSquare in the given room, or null if there
+	 * is none.
+	 */
+	public static ShortcutSquare findShortcut(RoomType room, Board board){
+		switch(room){
+		case KITCHEN : return (ShortcutSquare)board.squareAt(2, 4);
+		case STUDY : return (ShortcutSquare)board.squareAt(21, 22);
+		case LOUNGE : return (ShortcutSquare)board.squareAt(20, 1);
+		case CONSERVATORY : return (ShortcutSquare)board.squareAt(4, 22);
+		default : return null;
+		}
 	}
 	
 	@Override

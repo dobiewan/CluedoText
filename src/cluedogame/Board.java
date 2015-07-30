@@ -50,7 +50,7 @@ public class Board {
 		case '_' : sq = new GridSquare(); break;
 		case '?' : sq = new CharSquare('?'); break;
 		case '#' : sq = new CharSquare(title.poll()); break;
-		case '~' : sq = new ShortcutSquare(shortcuts.poll()); break;
+		case '~' : sq = new ShortcutSquare(shortcuts.poll(), this); break;
 		case '*' : sq = new StarterSquare(/*players.poll()*/); break;
 		case 'K' : sq = new RoomWallSquare(RoomType.KITCHEN); break;
 		case 'B' : sq = new RoomWallSquare(RoomType.BALLROOM); break;
@@ -61,15 +61,15 @@ public class Board {
 		case 'H' : sq = new RoomWallSquare(RoomType.HALL); break;
 		case 'G' : sq = new RoomWallSquare(RoomType.LOUNGE); break;
 		case 'D' : sq = new RoomWallSquare(RoomType.DINING_ROOM); break;
-		case 'k' : sq = new RoomSquare(RoomType.KITCHEN); break;
-		case 'b' : sq = new RoomSquare(RoomType.BALLROOM); break;
-		case 'c' : sq = new RoomSquare(RoomType.CONSERVATORY); break;
-		case 'p' : sq = new RoomSquare(RoomType.BILLIARD_ROOM); break;
-		case 'l' : sq = new RoomSquare(RoomType.LIBRARY); break;
-		case 's' : sq = new RoomSquare(RoomType.STUDY); break;
-		case 'h' : sq = new RoomSquare(RoomType.HALL); break;
-		case 'g' : sq = new RoomSquare(RoomType.LOUNGE); break;
-		case 'd' : sq = new RoomSquare(RoomType.DINING_ROOM); break;
+		case 'k' : sq = new RoomSquare(RoomType.KITCHEN, this); break;
+		case 'b' : sq = new RoomSquare(RoomType.BALLROOM, this); break;
+		case 'c' : sq = new RoomSquare(RoomType.CONSERVATORY, this); break;
+		case 'p' : sq = new RoomSquare(RoomType.BILLIARD_ROOM, this); break;
+		case 'l' : sq = new RoomSquare(RoomType.LIBRARY, this); break;
+		case 's' : sq = new RoomSquare(RoomType.STUDY, this); break;
+		case 'h' : sq = new RoomSquare(RoomType.HALL, this); break;
+		case 'g' : sq = new RoomSquare(RoomType.LOUNGE, this); break;
+		case 'd' : sq = new RoomSquare(RoomType.DINING_ROOM, this); break;
 		}
 		return sq;
 	}
@@ -167,6 +167,15 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Returns the square at the given position
+	 * @param row The row of the desired square
+	 * @param col The column of the desired square
+	 * @return The Square at board[row][col]
+	 */
+	public Square squareAt(int row, int col){
+		return board[row][col];
+	}
 	
 	public static void main(String[] args){
 //		new BoardDrawer().drawBoard();

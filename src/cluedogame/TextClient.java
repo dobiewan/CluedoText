@@ -140,15 +140,25 @@ public class TextClient {
 				System.out.println(player.getName() + " rolls a " + roll + ".");
 				//TODO move player (make method)
 				// display player's options
-				playerOptions(player, game);
+				playerOptions(player, game, roll);
 				// TODO escape route when accusation made (make accuse method)
 			}
 			turn++;
 		}
 	}
 
-	private static void playerOptions(Player player, GameOfCluedo game) {
-		// TODO Auto-generated method stub
+	/**
+	 * Provides the player with all possible actions they may take.
+	 * @param player The player whose turn it is.
+	 * @param game The current game of Cluedo.
+	 * @param roll The number rolled by the dice.
+	 */
+	private static void playerOptions(Player player, GameOfCluedo game, int roll) {
+		System.out.println("What will "+ player.getName() +" do next?");
+		Board board = game.getBoard();
+		int playerR = player.row();
+		int playerC = player.column();
+		// can the player move left?
 		
 	}
 }
