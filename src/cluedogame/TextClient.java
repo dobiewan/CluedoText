@@ -64,6 +64,7 @@ public class TextClient {
 		// ask each player for details
 		for (int i = 1; i <= nplayers; i++) {
 			String chosenCharacter = inputString("Player #" + i + " character?");
+			chosenCharacter = simpleToFullName(chosenCharacter);
 			// check validity of character
 			if (!characters.contains(chosenCharacter)) {
 				System.out.print("That's not a valid character. Please choose one of: ");
@@ -71,6 +72,7 @@ public class TextClient {
 				System.out.println();
 				// ask again
 				chosenCharacter = inputString("Player #" + i + " token?");
+				chosenCharacter = simpleToFullName(chosenCharacter);
 			}
 			
 			characters.remove(chosenCharacter); // the chosen character is no longer available
@@ -119,7 +121,7 @@ public class TextClient {
 
 		// Print banner ;)
 		System.out.println("*** Cluedo Version 1.0 ***");
-		System.out.println("By Christopher Read and Sarah Dobie, 2015");
+		System.out.println("By Chris Read and Sarah Dobie, 2015");
 
 		// input player info
 		int nplayers = inputNumber("How many players?");
@@ -172,10 +174,8 @@ public class TextClient {
 			availableDirections(board, pr, pc, options);
 			
 			// check if the player can make an accusation
-			if(player.canMakeAccusation()){
-				System.out.println("A : Make an accusation");
-				options.add("A");
-			}
+			System.out.println("A : Make an accusation");
+			options.add("A");
 			
 			// check if the currrent square is a room
 			if(board.squareAt(pr, pc) instanceof RoomSquare){
@@ -203,8 +203,10 @@ public class TextClient {
 			case ("R") : player.moveRight(); break;
 			case ("U") : player.moveUp(); break;
 			case ("D") : player.moveDown(); break;
-			case ("A") : makeAccusation(player); gameOver = true; break outer;
-			case ("M") : makeSuggestion(player); break;
+			// while we shouldnt have the gameover here, since all players
+			// will be using the same screen it might as well be over
+			case ("A") : makeAccusation(player, game); gameOver = true; break outer;
+			case ("M") : makeSuggestion(player, game); break;
 			case ("S") : takeShortcut(player); break;
 			
 			}
@@ -311,15 +313,173 @@ public class TextClient {
 			return false;
 		}
 	}
-
-	private static void makeSuggestion(Player player) {
-		// TODO Auto-generated method stub
-		
+	
+	/**
+	 * Converts a simplified name, (eg. "Scarlett") into the full name,
+	 * (eg. "Miss Scarlett").
+	 * @param name The simplified name to convert.
+	 * @return The full version of the simplified name.
+	 */
+	public static String simpleToFullName(String name){
+		switch(name){
+		case "Miss Scarlett":
+		case "Scarlett" : return "Miss Scarlett";
+		case "Colonel Mustard":
+		case "Mustard" : return "Colonel Mustard";
+		case "Mrs White":
+		case "White" : return "Mrs White";
+		case "Reverend Green":
+		case "The Reverend Green":
+		case "Green" : return "The Reverend Green";
+		case "Mrs Peacock":
+		case "Peacock" : return "Mrs Peacock";
+		case "Professor Plum":
+		case "Plum" : return "Professor Plum";
+		default : return "";
+		}
+	}
+	
+	/**
+	 * Converts a simplified weapon, (eg. "Pipe") into the full name,
+	 * (eg. "Lead Pipe").
+	 * @param name The simplified weapon name to convert.
+	 * @return The full version of the simplified weapon name.
+	 */
+	public static String simpleToFullWeapon(String weapon){
+		switch(weapon){
+		case "Candlestick" : case "candlestick" : return "Candlestick";
+		case "Dagger": case "dagger": return "Dagger";
+		case "Revolver" : case "revolver" : return "Revolver";
+		case "Rope": case "rope": return "Rope";
+		case "Spanner" : case "spanner" : return "Spanner";
+		case "Pipe": case "Lead Pipe" : case "pipe": case "lead pipe" : return "Lead Pipe";
+		default : return "";
+		}
+	}
+	
+	/**
+	 * Converts a simplified room, (eg. "billiard") into the full name,
+	 * (eg. "Billiard Room").
+	 * @param name The simplified room name to convert.
+	 * @return The full version of the simplified room name.
+	 */
+	public static String simpleToFullRoom(String room){
+		switch(room){
+		case "Conservatory" : case "conservatory" : return "Conservatory";
+		case "Library": case "library": return "Library";
+		case "Study" : case "study" : return "Study";
+		case "Hall": case "hall": return "Hall";
+		case "Lounge" : case "lounge" : return "Lounge";
+		case "Kitchen" : case "kitchen" : return "Kitchen";
+		case "Billiard Room": case "billiard room" : case "Billiard": case "billiard" : return "Billiard Room";
+		case "Dining Room": case "dining room" : case "Dining": case "dining" : return "Dining Room";
+		case "Ball Room": case "ball room" : case "Ball": case "ball" : return "Ball Room";
+		default : return "";
+		}
+	}
+	
+	
+	/**
+	 * Prompts the player to select a character by typing their name
+	 * @return the full name of the character
+	 */
+	public static String selectCharacter(){
+		// Display options for the player to select a character
+		System.out.println(" - Miss Scarlett/n - Colonel Mustard/n - Mrs White"
+				+ "/n - Reverend Green/n - Mrs Peacock/n - Professor Plum");
+		String character = inputString("Enter the character's name: ");
+		character = simpleToFullName(character);
+		while (character == ""){
+			character = inputString("Invalid input - please try again: ");
+			character = simpleToFullName(character);
+		}
+		return character;
+	}
+	
+	/**
+	 * Prompts the player to select a weapon by typing its name
+	 * @return the full name of the weapon
+	 */
+	public static String selectWeapon(){
+		// Display options for the player to select a weapon
+		System.out.println("- Candlestick/n - Dagger/n - Revolver"
+				+ "/n - Rope/n - Spanner/n - Lead Pipe");
+		String weapon = inputString("Enter the weapon: ");
+		weapon = simpleToFullWeapon(weapon);
+		while (weapon == ""){
+			weapon = inputString("Invalid input - please try again: ");
+			weapon = simpleToFullWeapon(weapon);
+		}
+		return weapon;
+	}
+	
+	/**
+	 * Prompts the player to select a room by typing its name
+	 * @return the full name of the room
+	 */
+	public static String selectRoom(){
+		// Display options for the player to select a room
+		System.out.println("- Conservatory/n - Billiard Room/n - Library"
+				+ "/n - Study/n - Hall/n - Lounge"
+				+ "/n - Dining Room/n - Kitchen/n - Ball Room");
+		String room = inputString("Enter the room: ");
+		room = simpleToFullRoom(room);
+		while (room == ""){
+			room = inputString("Invalid input - please try again: ");
+			room = simpleToFullRoom(room);
+		}
+		return room;
 	}
 
-	private static void makeAccusation(Player player) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Prompts the player to enter a character, weapon and room and
+	 * checks whether the named cards are in any players hands.
+	 * If so, adds them to the seen cards of the players
+	 * @param game 
+	 * @param current player
+	 */
+	private static void makeSuggestion(Player player, GameOfCluedo game) {
+		System.out.println("Suggest a character, weapon and room:");
+		String character = selectCharacter();
+		String weapon = selectWeapon();
+		String room = selectRoom();
+		for (Player p : game.getPlayers()){
+			if (p != player){
+				for (Card c : p.getHand()){
+					String cardName = c.getName();
+					if (cardName.equals(character) || cardName.equals(weapon) || cardName.equals(room)){
+						System.out.println(p.getName() + " has the card: " + cardName);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Prompts the player to choose a character, weapon and room
+	 * and checks them against the murderer, murder weapon and murder location
+	 * If Successful, the player wins the game
+	 * @param player
+	 * @param game
+	 */
+	private static void makeAccusation(Player player, GameOfCluedo game) {
+		// Print ominous message
+		System.out.println("This is serious business... One of us could be the murderer!");
+		// Prompt player to select cards
+		String[] accusation = new String[3];
+		accusation[0] = selectCharacter();
+		accusation[1] = selectWeapon();
+		accusation[2] = selectRoom();
+		// make accusation
+		if (game.accuse(accusation)){
+			// player made a correct accusation and won the game
+			System.out.println("You are correct!/n" + accusation[0] 
+					+ " used the " + accusation[1] + " in the " + accusation[2] + "!");
+		} else {
+			// accusation was incorrect, insult player
+			System.out.println("You were wrong!/n ...you didn't really think this through...");
+		}
+		System.out.println("/n/n--GAME OVER--/n");
 	}
 
 	private static void takeShortcut(Player player) {

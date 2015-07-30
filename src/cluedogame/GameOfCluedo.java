@@ -7,6 +7,14 @@ import cluedogame.cards.*;
 public class GameOfCluedo {
 	public static final int TOTAL_NUM_CARDS = 21;
 	
+	// Characters
+	public static final String SCARLETT = "Miss Scarlett";
+	public static final String MUSTARD = "Colonel Mustard";
+	public static final String WHITE = "Mrs White";
+	public static final String GREEN = "Reverend Green";
+	public static final String PEACOCK = "Mrs Peacock";
+	public static final String PLUM = "Professor Plum";
+	
 	private List<Card> characterCards;
 	private List<Card> roomCards;
 	private List<Card> weaponCards;
@@ -29,12 +37,12 @@ public class GameOfCluedo {
 		
 		// add character cards
 		List<Card> cCards = new ArrayList<Card>();
-		cCards.add(new CharacterCard("Miss Scarlett"));
-		cCards.add(new CharacterCard("Colonel Mustard"));
-		cCards.add(new CharacterCard("Mrs White"));
-		cCards.add(new CharacterCard("Reverend Green"));
-		cCards.add(new CharacterCard("Mrs Peacock"));
-		cCards.add(new CharacterCard("Professor Plum"));
+		cCards.add(new CharacterCard(SCARLETT));
+		cCards.add(new CharacterCard(MUSTARD));
+		cCards.add(new CharacterCard(WHITE));
+		cCards.add(new CharacterCard(GREEN));
+		cCards.add(new CharacterCard(PEACOCK));
+		cCards.add(new CharacterCard(PLUM));
 		Collections.shuffle(cCards);
 		this.characterCards = cCards;
 		
@@ -45,7 +53,7 @@ public class GameOfCluedo {
 		rCards.add(new RoomCard("Library"));
 		rCards.add(new RoomCard("Study"));
 		rCards.add(new RoomCard("Hall"));
-		rCards.add(new RoomCard("Loungey"));
+		rCards.add(new RoomCard("Lounge"));
 		rCards.add(new RoomCard("Dining Room"));
 		rCards.add(new RoomCard("Kitchen"));
 		rCards.add(new RoomCard("Ball Room"));
@@ -73,11 +81,25 @@ public class GameOfCluedo {
 		int randomIndex = (int) (Math.random()*(characterCards.size()-1));
 		this.murderCards[0] = this.characterCards.get(randomIndex);
 		// choose a room card
-		randomIndex = (int) (Math.random()*(roomCards.size()-1));
-		this.murderCards[1] = this.roomCards.get(randomIndex);
-		// choose a weapon card
 		randomIndex = (int) (Math.random()*(weaponCards.size()-1));
-		this.murderCards[2] = this.weaponCards.get(randomIndex);
+		this.murderCards[1] = this.weaponCards.get(randomIndex);
+		// choose a weapon card
+		randomIndex = (int) (Math.random()*(roomCards.size()-1));
+		this.murderCards[2] = this.roomCards.get(randomIndex);
+	}
+	
+	/**
+	 * checks an accusation against the murder cards
+	 * @param String array containing the character, weapon and room in that order
+	 * @return true only if all three cards are correct
+	 */
+	public boolean accuse(String[] accusation){
+		for (int i = 0; i < murderCards.length; i++){
+			if (!accusation[i].equals(murderCards[i])){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public Board getBoard(){
@@ -86,6 +108,10 @@ public class GameOfCluedo {
 	
 	public void setPlayers(Queue<Player> players){
 		this.players = players;
+	}
+	
+	public Queue<Player> getPlayers(){
+		return players;
 	}
 
 	public void drawBoard() {

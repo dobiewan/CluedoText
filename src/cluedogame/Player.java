@@ -21,9 +21,9 @@ public class Player {
 	 * @param simpleName The simplified name for the chosen character.
 	 * @param number The player's id.
 	 */
-	public Player(String simpleName, char number) {
+	public Player(String name, char number) {
 		super();
-		this.name = simpleToFullName(simpleName);
+		this.name = name;
 		this.number = number;
 		this.hand = new HashSet<Card>();
 		this.cardsSeen = new HashSet<Card>();
@@ -31,42 +31,44 @@ public class Player {
 		this.rPosition = startRow(this.name);
 	}
 	
+	/**
+	 * gets the cards in the current players hand
+	 * @return the cards in hand
+	 */
+	public Set<Card> getHand(){
+		return hand;
+	}
+	
+	/**
+	 * returns the column, or X position of the player
+	 * @return the current column of the player
+	 */
 	public int column(){
 		return cPosition;
 	}
 	
+	/**
+	 * returns the row, or Y position of the player
+	 * @return the current row of the player
+	 */
 	public int row(){
 		return rPosition;
 	}
 	
+	/**
+	 * gets the ID number (represented as a char)
+	 * @return Player ID
+	 */
 	public char ID(){
 		return number;
 	}
 	
+	/**
+	 * gets the game of the player character
+	 * @return player character name
+	 */
 	public String getName(){
 		return name;
-	}
-	
-	public boolean canMakeAccusation(){
-		return cardsSeen.size() == GameOfCluedo.TOTAL_NUM_CARDS - 3;
-	}
-	
-	/**
-	 * Converts a simplified name, (eg. "Scarlett") into the full name,
-	 * (eg. "Miss Scarlett").
-	 * @param name The simplified name to convert.
-	 * @return The full version of the simplified name.
-	 */
-	public static String simpleToFullName(String name){
-		switch(name){
-		case "Scarlett" : return "Miss Scarlett";
-		case "Mustard" : return "Colonel Mustard";
-		case "White" : return "Mrs White";
-		case "Green" : return "The Reverend Green";
-		case "Peacock" : return "Mrs Peacock";
-		case "Plum" : return "Professor Plum";
-		default : return "";
-		}
 	}
 	
 	
@@ -104,23 +106,35 @@ public class Player {
 		}
 	}
 
+	/**
+	 * moves the player character left one space on the game board
+	 */
 	public void moveLeft() {
-		// TODO Auto-generated method stub
+		this.cPosition -= 1;
 		
 	}
 
+	/**
+	 * moves the player character right one space on the game board
+	 */
 	public void moveRight() {
-		// TODO Auto-generated method stub
+		this.cPosition += 1;
 		
 	}
 
+	/**
+	 * moves the player character up one space on the game board
+	 */
 	public void moveUp() {
-		// TODO Auto-generated method stub
+		this.rPosition -= 1;
 		
 	}
 
+	/**
+	 * moves the player character down one space on the game board
+	 */
 	public void moveDown() {
-		// TODO Auto-generated method stub
+		this.rPosition += 1;
 		
 	}
 	
