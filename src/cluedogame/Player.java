@@ -94,7 +94,7 @@ public class Player {
 	 */
 	public static int startRow(String name){
 		switch(name){
-		case "Miss Scarlett" : return 24;
+		case "Miss Scarlett" : return 23;
 		case "Colonel Mustard" : return 18;
 		case "Mrs White" : return 0;
 		case "The Reverend Green" : return 0;
@@ -103,4 +103,26 @@ public class Player {
 		default : return -1;
 		}
 	}
+
+	public void moveLeft() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void moveRight() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void moveUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void moveDown() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

@@ -12,6 +12,11 @@ public class Board {
 	
 	private Square[][] board = new Square[25][24];
 	
+	public Board(){
+		File f = new File("boardFile.txt");
+		parse(f);
+	}
+	
 	/**
 	 * Loads a board from a given file.
 	 * @param file The file containing the board data.
@@ -179,11 +184,11 @@ public class Board {
 	
 	public static void main(String[] args){
 //		new BoardDrawer().drawBoard();
-		File f = new File("boardFile.txt");
+//		File f = new File("boardFile.txt");
 		Board b = new Board();
-		b.parse(f);
-		Queue<Player> players = new LinkedList<Player>();
-		players.offer(new Player("Miss Scarlett", '1'));
-		b.draw(players);
+//		b.parse(f);
+//		Queue<Player> players = new LinkedList<Player>();
+//		players.offer(new Player("Miss Scarlett", '1'));
+//		b.draw(players);
 	}
 }

@@ -15,6 +15,7 @@ public class GameOfCluedo {
 	private Board board;
 	
 	public GameOfCluedo(){
+		this.board = new Board();
 		setupCards();
 		setMurderCards();
 	}
@@ -85,6 +86,10 @@ public class GameOfCluedo {
 	
 	public void setPlayers(Queue<Player> players){
 		this.players = players;
+	}
+
+	public void drawBoard() {
+		board.draw(players);
 	}
 	
 }
