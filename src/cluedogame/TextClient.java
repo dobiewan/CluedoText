@@ -10,6 +10,8 @@ import java.util.Queue;
 import java.util.Random;
 
 import cluedogame.*;
+import cluedogame.cards.*;
+import cluedogame.sqaures.*;
 
 public class TextClient {
 
@@ -138,10 +140,9 @@ public class TextClient {
 				firstTime = false;
 				int roll = dice.nextInt(6) + 1;
 				System.out.println(player.getName() + " rolls a " + roll + ".");
-				//TODO move player (make method)
 				// display player's options
 				playerOptions(player, game, roll);
-				// TODO escape route when accusation made (make accuse method)
+				// TODO escape from loop when accusation made (make accuse method)
 			}
 			turn++;
 		}
@@ -156,9 +157,123 @@ public class TextClient {
 	private static void playerOptions(Player player, GameOfCluedo game, int roll) {
 		System.out.println("What will "+ player.getName() +" do next?");
 		Board board = game.getBoard();
-		int playerR = player.row();
-		int playerC = player.column();
-		// can the player move left?
+		int pr = player.row();
+		int pc = player.column();
 		
+		for(int i=roll; i>0; i++){
+			System.out.println("What will "+ player.getName() +" do next?");
+			
+			// check the directions the player can move in
+			availableDirections(board, pr, pc);
+			// check if the player can make an accusation
+			
+			// check if the currrent square is a room
+			if(board.squareAt(pr, pc) instanceof RoomSquare){
+				RoomSquare sq = (RoomSquare)board.squareAt(pr, pc);
+				// player can make a suggestion if in a room
+				System.out.println("M : Make an accusatory suggestion");
+				// check for a shortcut in the room
+				if(sq.shortcut() != null){
+					System.out.println("S : Take a shortcut");
+				}
+			}
+		
+		}
+		
+	}
+
+	/**
+	 * Check which directions the player can move in, and prints out
+	 * the available options.
+	 * @param board The board being played on
+	 * @param playerRow The player's current row position
+	 * @param playerCol The player's current column position
+	 */
+	private static void availableDirections(Board board, int playerRow,
+			int playerCol) {
+		// left
+		if(canMoveLeft(playerRow, playerCol, board)){
+			System.out.println("L : Move left");
+		}
+		// right
+		if(canMoveRight(playerRow, playerCol, board)){
+			System.out.println("R : Move right");
+		}
+		// up
+		if(canMoveUp(playerRow, playerCol, board)){
+			System.out.println("U : Move up");
+		}
+		// down
+		if(canMoveDown(playerRow, playerCol, board)){
+			System.out.println("D : Move down");
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move left.
+	 * @param playerRow The player's current row position
+	 * @param playerCol The player's current column position
+	 * @param board The board being played on
+	 * @return True if the square to the left of the player can be
+	 * stepped on; false otherwise.
+	 */
+	private static boolean canMoveLeft(int playerRow, int playerCol, Board board){
+		try{
+			Square leftSquare = board.squareAt(playerRow, playerCol-1);
+			return leftSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move right.
+	 * @param playerRow The player's current row position
+	 * @param playerCol The player's current column position
+	 * @param board The board being played on
+	 * @return True if the square to the right of the player can be
+	 * stepped on; false otherwise.
+	 */
+	private static boolean canMoveRight(int playerRow, int playerCol, Board board){
+		try {
+			Square rightSquare = board.squareAt(playerRow, playerCol+1);
+			return rightSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move up.
+	 * @param playerRow The player's current row position
+	 * @param playerCol The player's current column position
+	 * @param board The board being played on
+	 * @return True if the square to the up of the player can be
+	 * stepped on; false otherwise.
+	 */
+	private static boolean canMoveUp(int playerRow, int playerCol, Board board){
+		try {
+			Square upSquare = board.squareAt(playerRow-1, playerCol);
+			return upSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move down.
+	 * @param playerRow The player's current row position
+	 * @param playerCol The player's current column position
+	 * @param board The board being played on
+	 * @return True if the square to the down of the player can be
+	 * stepped on; false otherwise.
+	 */
+	private static boolean canMoveDown(int playerRow, int playerCol, Board board){
+		try {
+			Square downSquare = board.squareAt(playerRow+1, playerCol);
+			return downSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
 	}
 }

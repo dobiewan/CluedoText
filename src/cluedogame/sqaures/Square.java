@@ -13,10 +13,14 @@ public abstract class Square {
 		this.steppable = steppable;
 	}
 	
+	public boolean isSteppable(){
+		return steppable;
+	}
+	
 	/**
 	 * Returns the character that will represent this square on
 	 * the board.
-	 * @return
+	 * @return A char representation of this Square.
 	 */
 	public abstract char boardChar();
 }

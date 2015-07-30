@@ -5,6 +5,8 @@ import java.util.*;
 import cluedogame.cards.*;
 
 public class GameOfCluedo {
+	public static final int TOTAL_NUM_CARDS = 21;
+	
 	private List<Card> characterCards;
 	private List<Card> roomCards;
 	private List<Card> weaponCards;

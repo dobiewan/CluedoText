@@ -1,5 +1,6 @@
 package cluedogame;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import cluedogame.PlayerType;
@@ -10,6 +11,7 @@ public class Player {
 	private String name; // which character playing as
 	private char number; // the number displayed on the board
 	private Set<Card> hand; // cards in the player's hand
+	private Set<Card> cardsSeen; // cards the player has seen
 	
 	private int cPosition; // the player's current column pos
 	private int rPosition; // the player's current row pos
@@ -23,6 +25,8 @@ public class Player {
 		super();
 		this.name = simpleToFullName(simpleName);
 		this.number = number;
+		this.hand = new HashSet<Card>();
+		this.cardsSeen = new HashSet<Card>();
 		this.cPosition = startCol(this.name);
 		this.rPosition = startRow(this.name);
 	}
@@ -41,6 +45,10 @@ public class Player {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public boolean canMakeAccusation(){
+		return cardsSeen.size() == GameOfCluedo.TOTAL_NUM_CARDS - 3;
 	}
 	
 	/**

@@ -19,6 +19,10 @@ public class RoomSquare extends Square {
 		this.shortcut = findShortcut(room, board);
 	}
 	
+	public ShortcutSquare shortcut(){
+		return shortcut;
+	}
+	
 	/**
 	 * Finds the shortcut square for the given room.
 	 * @param room The room which may contain a shortcut
