@@ -79,12 +79,12 @@ public class Player {
 	 */
 	public static int startCol(String name){
 		switch(name){
-		case "Miss Scarlett" : return 7;
-		case "Colonel Mustard" : return 0;
-		case "Mrs White" : return 9;
-		case "The Reverend Green" : return 14;
-		case "Mrs Peacock" : return 23;
-		case "Professor Plum" : return 23;
+		case GameOfCluedo.SCARLETT : return 7;
+		case GameOfCluedo.MUSTARD : return 0;
+		case GameOfCluedo.WHITE : return 9;
+		case GameOfCluedo.GREEN : return 14;
+		case GameOfCluedo.PEACOCK : return 23;
+		case GameOfCluedo.PLUM : return 23;
 		default : return -1;
 		}
 	}
@@ -96,12 +96,12 @@ public class Player {
 	 */
 	public static int startRow(String name){
 		switch(name){
-		case "Miss Scarlett" : return 24;
-		case "Colonel Mustard" : return 17;
-		case "Mrs White" : return 0;
-		case "The Reverend Green" : return 0;
-		case "Mrs Peacock" : return 6;
-		case "Professor Plum" : return 19;
+		case GameOfCluedo.SCARLETT : return 24;
+		case GameOfCluedo.MUSTARD : return 17;
+		case GameOfCluedo.WHITE : return 0;
+		case GameOfCluedo.GREEN : return 0;
+		case GameOfCluedo.PEACOCK : return 6;
+		case GameOfCluedo.PLUM : return 19;
 		default : return -1;
 		}
 	}

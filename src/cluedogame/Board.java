@@ -9,8 +9,10 @@ import java.util.Scanner;
 import cluedogame.sqaures.*;
 
 public class Board {
+	public static int ROWS = 25;
+	public static int COLS = 24;
 	
-	private Square[][] board = new Square[25][24];
+	private Square[][] board = new Square[ROWS][COLS];
 	
 	public Board(){
 		File f = new File("boardFile.txt");
@@ -128,17 +130,32 @@ public class Board {
 	}
 	
 	/**
+	 * Make a copy of the board
+	 * @return A new 2D array referencing all the same Squares as
+	 * the board field.
+	 */
+	private Square[][] copyBoard(){
+		Square[][] copy = new Square[ROWS][COLS];
+		for(int r=0; r<ROWS; r++){
+			for(int c=0; c<COLS; c++){
+				copy[r][c] = board[r][c];
+			}
+		}
+		return copy;
+	}
+	
+	/**
 	 * 'Draws' the board on the console.
 	 */
 	public void draw(Queue<Player> players){
 		// replace squares for player positions
-		Square[][] drawBoard = board;
+		Square[][] drawBoard = copyBoard();
 		for (Player p : players){
 			drawBoard[p.row()][p.column()] = new CharSquare(p.ID());
 		}
 		
 		// iterate over every row
-		for(int r=0; r<drawBoard.length; r++){
+		for(int r=0; r<ROWS; r++){
 			// don't draw a wall if the next square is blank or a letter
 			boolean drawnBlank = false;
 			if(drawBoard[r][0] instanceof BlankSquare){
@@ -147,7 +164,7 @@ public class Board {
 				System.out.print("|");
 			}
 			// iterate over every column in r
-			for(int c=0; c<drawBoard[0].length; c++){
+			for(int c=0; c<COLS; c++){
 				Square sq = drawBoard[r][c];
 				// don't draw a wall if this square is blank or a letter
 				if(sq instanceof BlankSquare || sq instanceof CharSquare){

@@ -11,9 +11,28 @@ public class GameOfCluedo {
 	public static final String SCARLETT = "Miss Scarlett";
 	public static final String MUSTARD = "Colonel Mustard";
 	public static final String WHITE = "Mrs White";
-	public static final String GREEN = "Reverend Green";
+	public static final String GREEN = "The Reverend Green";
 	public static final String PEACOCK = "Mrs Peacock";
 	public static final String PLUM = "Professor Plum";
+	
+	// Weapons
+	public static final String CANDLESTICK = "Candlestick";
+	public static final String DAGGER = "Dagger";
+	public static final String LEAD_PIPE = "Lead Pipe";
+	public static final String REVOLVER = "Revolver";
+	public static final String ROPE = "Rope";
+	public static final String SPANNER = "Spanner";
+	
+	// Rooms
+	public static final String KITCHEN = "Kitchen";
+	public static final String BALL_ROOM = "Ball Room";
+	public static final String CONSERVATORY = "Conservatory";
+	public static final String BILLIARD_ROOM = "Billiard Room";
+	public static final String LIBRARY = "Library";
+	public static final String STUDY = "Study";
+	public static final String HALL = "Hall";
+	public static final String LOUNGE = "Lounge";
+	public static final String DINING_ROOM = "Dining Room";
 	
 	private List<Card> characterCards;
 	private List<Card> roomCards;
