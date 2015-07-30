@@ -214,6 +214,7 @@ public class TextClient {
 	 * @param roll The number rolled by the dice.
 	 */
 	private static void playerOptions(Player player, GameOfCluedo game, int roll, boolean gameOver) {
+		System.out.println();
 		List<String> options = new ArrayList<String>(); // stores options available
 		Board board = game.getBoard();
 		
@@ -237,6 +238,8 @@ public class TextClient {
 				System.out.println("M : Make an accusatory suggestion");
 				options.add("M");
 				
+				//TODO leave room
+				
 				// check for a shortcut in the room
 				if(sq.shortcut() != null){
 					System.out.println("S : Take a shortcut");
@@ -244,12 +247,16 @@ public class TextClient {
 				}
 			}
 			
+			System.out.println();
+			
 			// receive user input
 			String choice = inputString("What will "+player.getName()+" do?");
 			// check input is valid
 			while(!options.contains(choice)){
 				choice = inputString("Invalid input. Please try again.");
 			}
+			
+			System.out.println();
 			
 			switch(choice){
 			case ("L") : player.moveLeft(); break;
@@ -419,15 +426,19 @@ public class TextClient {
 	 */
 	public static String simpleToFullRoom(String room){
 		switch(room){
-		case GameOfCluedo.CONSERVATORY : case "conservatory" : return GameOfCluedo.CONSERVATORY;
+		case GameOfCluedo.CONSERVATORY : case "conservatory" :
+			return GameOfCluedo.CONSERVATORY;
 		case GameOfCluedo.LIBRARY : case "library": return GameOfCluedo.LIBRARY;
 		case GameOfCluedo.STUDY : case "study" : return GameOfCluedo.STUDY;
 		case GameOfCluedo.HALL: case "hall": return GameOfCluedo.HALL;
 		case GameOfCluedo.LOUNGE : case "lounge" : return GameOfCluedo.LOUNGE;
 		case GameOfCluedo.KITCHEN : case "kitchen" : return GameOfCluedo.KITCHEN;
-		case GameOfCluedo.BILLIARD_ROOM : case "billiard room" : case "Billiard": case "billiard" : return GameOfCluedo.BILLIARD_ROOM;
-		case GameOfCluedo.DINING_ROOM: case "dining room" : case "Dining": case "dining" : return GameOfCluedo.DINING_ROOM;
-		case GameOfCluedo.BALL_ROOM: case "ball room" : case "Ball": case "ball" : return GameOfCluedo.BALL_ROOM;
+		case GameOfCluedo.BILLIARD_ROOM : case "billiard room" :
+			case "Billiard": case "billiard" : return GameOfCluedo.BILLIARD_ROOM;
+		case GameOfCluedo.DINING_ROOM: case "dining room" : case "Dining":
+			case "dining" : return GameOfCluedo.DINING_ROOM;
+		case GameOfCluedo.BALL_ROOM: case "ball room" : case "Ball":
+			case "ball" : return GameOfCluedo.BALL_ROOM;
 		default : return "";
 		}
 	}

@@ -5,16 +5,16 @@ import cluedogame.RoomType;
 
 public class ShortcutSquare extends Square {
 	
-	private RoomType toRoom;
+	private String toRoom;
 	private ShortcutSquare toSquare;
 	
-	public ShortcutSquare(RoomType toRoom, Board board){
+	public ShortcutSquare(String toRoom, Board board){
 		super(true);
 		this.toRoom = toRoom;
 		this.toSquare = RoomSquare.findShortcut(toRoom, board);
 	}
 	
-	public RoomType toRoom(){
+	public String toRoom(){
 		return this.toRoom;
 	}
 

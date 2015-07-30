@@ -2,6 +2,7 @@ package cluedogame.sqaures;
 
 import cluedogame.Board;
 import cluedogame.RoomType;
+import cluedogame.*;
 
 /**
  * Represents a room which a player may enter.
@@ -10,10 +11,10 @@ import cluedogame.RoomType;
  */
 public class RoomSquare extends Square {
 	
-	RoomType room;
+	String room;
 	ShortcutSquare shortcut; // the shortcut square in this room, or null if there is none
 	
-	public RoomSquare(RoomType room, Board board){
+	public RoomSquare(String room, Board board){
 		super(true);
 		this.room = room;
 		this.shortcut = findShortcut(room, board);
@@ -30,12 +31,23 @@ public class RoomSquare extends Square {
 	 * @return The ShortcutSquare in the given room, or null if there
 	 * is none.
 	 */
-	public static ShortcutSquare findShortcut(RoomType room, Board board){
+	public static ShortcutSquare findShortcut(String room, Board board){ //FIXME equals not ==
+//		if(room.equals(GameOfCluedo.KITCHEN)){
+//			return (ShortcutSquare)board.squareAt(2, 4);
+//		} else if(room.equals(GameOfCluedo.STUDY)){
+//			return (ShortcutSquare)board.squareAt(21, 22);
+//		} else if(room.equals(GameOfCluedo.LOUNGE)){
+//			return (ShortcutSquare)board.squareAt(20, 1);
+//		} else if(room.equals(GameOfCluedo.CONSERVATORY)){
+//			return (ShortcutSquare)board.squareAt(4, 22);
+//		} else {
+//			return null;
+//		}
 		switch(room){
-		case KITCHEN : return (ShortcutSquare)board.squareAt(2, 4);
-		case STUDY : return (ShortcutSquare)board.squareAt(21, 22);
-		case LOUNGE : return (ShortcutSquare)board.squareAt(20, 1);
-		case CONSERVATORY : return (ShortcutSquare)board.squareAt(4, 22);
+		case GameOfCluedo.KITCHEN : return (ShortcutSquare)board.squareAt(2, 4);
+		case GameOfCluedo.STUDY : return (ShortcutSquare)board.squareAt(21, 22);
+		case GameOfCluedo.LOUNGE : return (ShortcutSquare)board.squareAt(20, 1);
+		case GameOfCluedo.CONSERVATORY : return (ShortcutSquare)board.squareAt(4, 22);
 		default : return null;
 		}
 	}

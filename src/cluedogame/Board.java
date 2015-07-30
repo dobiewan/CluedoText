@@ -29,7 +29,7 @@ public class Board {
 			// create queues of special squares
 			Queue<Character> title = titleChars();
 			Queue<PlayerType> players = startPlayers();
-			Queue<RoomType> shortcuts = shortcutRooms();
+			Queue<String> shortcuts = shortcutRooms();
 			// iterate over each row
 			for(int r = 0; r<board.length; r++){
 				String line = s.nextLine();
@@ -50,7 +50,7 @@ public class Board {
 	}
 
 	private Square squareTypeFromCode(char code, Queue<Character> title,
-			/*Queue<PlayerType> players,*/ Queue<RoomType> shortcuts) {
+			/*Queue<PlayerType> players,*/ Queue<String> shortcuts) {
 		Square sq = null;
 		switch(code){
 		case '/' : sq = new BlankSquare(); break;
@@ -59,24 +59,24 @@ public class Board {
 		case '#' : sq = new CharSquare(title.poll()); break;
 		case '~' : sq = new ShortcutSquare(shortcuts.poll(), this); break;
 		case '*' : sq = new StarterSquare(/*players.poll()*/); break;
-		case 'K' : sq = new RoomWallSquare(RoomType.KITCHEN); break;
-		case 'B' : sq = new RoomWallSquare(RoomType.BALLROOM); break;
-		case 'C' : sq = new RoomWallSquare(RoomType.CONSERVATORY); break;
-		case 'P' : sq = new RoomWallSquare(RoomType.BILLIARD_ROOM); break;
-		case 'L' : sq = new RoomWallSquare(RoomType.LIBRARY); break;
-		case 'S' : sq = new RoomWallSquare(RoomType.STUDY); break;
-		case 'H' : sq = new RoomWallSquare(RoomType.HALL); break;
-		case 'G' : sq = new RoomWallSquare(RoomType.LOUNGE); break;
-		case 'D' : sq = new RoomWallSquare(RoomType.DINING_ROOM); break;
-		case 'k' : sq = new RoomSquare(RoomType.KITCHEN, this); break;
-		case 'b' : sq = new RoomSquare(RoomType.BALLROOM, this); break;
-		case 'c' : sq = new RoomSquare(RoomType.CONSERVATORY, this); break;
-		case 'p' : sq = new RoomSquare(RoomType.BILLIARD_ROOM, this); break;
-		case 'l' : sq = new RoomSquare(RoomType.LIBRARY, this); break;
-		case 's' : sq = new RoomSquare(RoomType.STUDY, this); break;
-		case 'h' : sq = new RoomSquare(RoomType.HALL, this); break;
-		case 'g' : sq = new RoomSquare(RoomType.LOUNGE, this); break;
-		case 'd' : sq = new RoomSquare(RoomType.DINING_ROOM, this); break;
+		case 'K' : sq = new RoomWallSquare(GameOfCluedo.KITCHEN); break;
+		case 'B' : sq = new RoomWallSquare(GameOfCluedo.BALL_ROOM); break;
+		case 'C' : sq = new RoomWallSquare(GameOfCluedo.CONSERVATORY); break;
+		case 'P' : sq = new RoomWallSquare(GameOfCluedo.BILLIARD_ROOM); break;
+		case 'L' : sq = new RoomWallSquare(GameOfCluedo.LIBRARY); break;
+		case 'S' : sq = new RoomWallSquare(GameOfCluedo.STUDY); break;
+		case 'H' : sq = new RoomWallSquare(GameOfCluedo.HALL); break;
+		case 'G' : sq = new RoomWallSquare(GameOfCluedo.LOUNGE); break;
+		case 'D' : sq = new RoomWallSquare(GameOfCluedo.DINING_ROOM); break;
+		case 'k' : sq = new RoomSquare(GameOfCluedo.KITCHEN, this); break;
+		case 'b' : sq = new RoomSquare(GameOfCluedo.BALL_ROOM, this); break;
+		case 'c' : sq = new RoomSquare(GameOfCluedo.CONSERVATORY, this); break;
+		case 'p' : sq = new RoomSquare(GameOfCluedo.BILLIARD_ROOM, this); break;
+		case 'l' : sq = new RoomSquare(GameOfCluedo.LIBRARY, this); break;
+		case 's' : sq = new RoomSquare(GameOfCluedo.STUDY, this); break;
+		case 'h' : sq = new RoomSquare(GameOfCluedo.HALL, this); break;
+		case 'g' : sq = new RoomSquare(GameOfCluedo.LOUNGE, this); break;
+		case 'd' : sq = new RoomSquare(GameOfCluedo.DINING_ROOM, this); break;
 		}
 		return sq;
 	}
@@ -120,12 +120,12 @@ public class Board {
 	 * @return A queue containing the RoomType at each shortcut
 	 * location, in the order that they will be parsed.
 	 */
-	private Queue<RoomType> shortcutRooms(){
-		Queue<RoomType> rooms = new LinkedList<RoomType>();
-		rooms.add(RoomType.STUDY);
-		rooms.add(RoomType.LOUNGE);
-		rooms.add(RoomType.CONSERVATORY);
-		rooms.add(RoomType.KITCHEN);
+	private Queue<String> shortcutRooms(){
+		Queue<String> rooms = new LinkedList<String>();
+		rooms.add(GameOfCluedo.STUDY);
+		rooms.add(GameOfCluedo.LOUNGE);
+		rooms.add(GameOfCluedo.CONSERVATORY);
+		rooms.add(GameOfCluedo.KITCHEN);
 		return rooms;
 	}
 	
