@@ -94,8 +94,8 @@ public class Player {
 	 */
 	public static int startRow(String name){
 		switch(name){
-		case "Miss Scarlett" : return 23;
-		case "Colonel Mustard" : return 18;
+		case "Miss Scarlett" : return 24;
+		case "Colonel Mustard" : return 17;
 		case "Mrs White" : return 0;
 		case "The Reverend Green" : return 0;
 		case "Mrs Peacock" : return 6;

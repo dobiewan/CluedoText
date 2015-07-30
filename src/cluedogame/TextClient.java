@@ -74,7 +74,7 @@ public class TextClient {
 			}
 			
 			characters.remove(chosenCharacter); // the chosen character is no longer available
-			players.add(new Player(chosenCharacter, Character.forDigit(1, 10))); // create the Player object
+			players.add(new Player(chosenCharacter, Character.forDigit(i, 10))); // create the Player object
 		}
 		return players;
 	}
@@ -123,8 +123,8 @@ public class TextClient {
 
 		// input player info
 		int nplayers = inputNumber("How many players?");
-		while(nplayers < 2){
-			nplayers = inputNumber("There must be at least 2 players. Try again: ");
+		while(nplayers < 2 || nplayers > 6){
+			nplayers = inputNumber("There must be 2-6 players. Try again: ");
 		}
 		LinkedList<Player> players = inputPlayers(nplayers);
 		game.setPlayers(players);

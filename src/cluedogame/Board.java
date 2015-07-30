@@ -134,7 +134,7 @@ public class Board {
 		// replace squares for player positions
 		Square[][] drawBoard = board;
 		for (Player p : players){
-			drawBoard[p.column()][p.row()] = new CharSquare(p.ID());
+			drawBoard[p.row()][p.column()] = new CharSquare(p.ID());
 		}
 		
 		// iterate over every row
@@ -182,13 +182,13 @@ public class Board {
 		return board[row][col];
 	}
 	
-	public static void main(String[] args){
+//	public static void main(String[] args){
 //		new BoardDrawer().drawBoard();
 //		File f = new File("boardFile.txt");
-		Board b = new Board();
+//		Board b = new Board();
 //		b.parse(f);
 //		Queue<Player> players = new LinkedList<Player>();
 //		players.offer(new Player("Miss Scarlett", '1'));
 //		b.draw(players);
-	}
+//	}
 }
