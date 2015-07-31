@@ -38,7 +38,7 @@ public class GameOfCluedo {
 	private List<Card> roomCards;
 	private List<Card> weaponCards;
 	private Card[] murderCards = new Card[3];
-	private Queue<Player> players;
+	private List<Player> players;
 	private Board board;
 	
 	public GameOfCluedo(){
@@ -98,13 +98,13 @@ public class GameOfCluedo {
 	private void setMurderCards(){
 		// choose a character card
 		int randomIndex = (int) (Math.random()*(characterCards.size()-1));
-		this.murderCards[0] = this.characterCards.get(randomIndex);
+		this.murderCards[0] = this.characterCards.remove(randomIndex);
 		// choose a room card
 		randomIndex = (int) (Math.random()*(weaponCards.size()-1));
-		this.murderCards[1] = this.weaponCards.get(randomIndex);
+		this.murderCards[1] = this.weaponCards.remove(randomIndex);
 		// choose a weapon card
 		randomIndex = (int) (Math.random()*(roomCards.size()-1));
-		this.murderCards[2] = this.roomCards.get(randomIndex);
+		this.murderCards[2] = this.roomCards.remove(randomIndex);
 	}
 	
 	/**
@@ -125,16 +125,48 @@ public class GameOfCluedo {
 		return board;
 	}
 	
-	public void setPlayers(Queue<Player> players){
+	public void setPlayers(List<Player> players){
 		this.players = players;
 	}
 	
-	public Queue<Player> getPlayers(){
+	public List<Player> getPlayers(){
 		return players;
 	}
 
 	public void drawBoard() {
 		board.draw(players);
+	}
+
+	public void dealCards(List<Player> players) {
+		Queue<Player> dealTo = new LinkedList<Player>();
+		dealTo.addAll(players);
+		// deal character cards
+		while(!characterCards.isEmpty()){
+			Player p = dealTo.poll();
+			p.addCard(characterCards.remove(0));
+			dealTo.add(p);
+		}
+		// deal weapon cards
+		while(!weaponCards.isEmpty()){
+			Player p = dealTo.poll();
+			p.addCard(weaponCards.remove(0));
+			dealTo.add(p);
+		}
+		// deal room cards
+		while(!roomCards.isEmpty()){
+			Player p = dealTo.poll();
+			p.addCard(roomCards.remove(0));
+			dealTo.add(p);
+		}
+		
+//		for(Player p : players){
+//			System.out.println();
+//			System.out.println(p.getName());
+//			System.out.println();
+//			for(Card c: p.getHand()){
+//				System.out.println(c.getName());
+//			}
+//		}
 	}
 	
 }

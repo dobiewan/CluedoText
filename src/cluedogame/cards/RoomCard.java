@@ -12,7 +12,7 @@ public class RoomCard extends Card {
 
 	@Override
 	public String getName() {
-		return "Rm:" + name;
+		return name;
 	}
 
 }

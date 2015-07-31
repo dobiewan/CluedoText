@@ -12,7 +12,7 @@ public class CharacterCard extends Card {
 
 	@Override
 	public String getName() {
-		return "Char:" + name;
+		return name;
 	}
 
 }

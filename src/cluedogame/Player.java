@@ -138,5 +138,17 @@ public class Player {
 		
 	}
 	
+	public void addCard(Card c){
+		hand.add(c);
+		cardsSeen.add(c);
+	}
+	
+	public void addCardSeen(Card c){
+		cardsSeen.add(c);
+	}
+	
+	public boolean hasSeenCard(Card c){
+		return cardsSeen.contains(c);
+	}
 	
 }

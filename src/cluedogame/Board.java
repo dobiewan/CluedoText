@@ -3,6 +3,7 @@ package cluedogame;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
@@ -147,7 +148,7 @@ public class Board {
 	/**
 	 * 'Draws' the board on the console.
 	 */
-	public void draw(Queue<Player> players){
+	public void draw(List<Player> players){
 		// replace squares for player positions
 		Square[][] drawBoard = copyBoard();
 		for (Player p : players){

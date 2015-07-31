@@ -12,7 +12,7 @@ public class WeaponCard extends Card {
 
 	@Override
 	public String getName() {
-		return "Wpn:" + name;
+		return name;
 	}
 
 }

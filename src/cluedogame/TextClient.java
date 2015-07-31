@@ -126,7 +126,7 @@ public class TextClient {
 		
 		// list characters to choose from
 		System.out.println("The characters you may choose from are:");
-		printOptions(characters);
+		printList(characters);
 
 		LinkedList<Player> players = new LinkedList<Player>();
 
@@ -136,7 +136,7 @@ public class TextClient {
 			// check validity of character
 			if (!characters.contains(chosenCharacter)) {
 				System.out.print("That's not a valid character. Please choose one of: ");
-				printOptions(characters);
+				printList(characters);
 				System.out.println();
 				// ask again
 				chosenCharacter = inputString("Player #" + i + " token?");
@@ -151,12 +151,13 @@ public class TextClient {
 	}
 	
 	/**
-	 * Prints out a list of some options.
+	 * Prints out a list nicely
+	 * @param The list to be printed
 	 */
-	private static void printOptions(List<String> characters){
+	private static void printList(List<String> list){
 		// print out each character name
 		boolean firstTime = true;
-		for (String s : characters) {
+		for (String s : list) {
 			if (!firstTime) {
 				// print a comma if appropriate
 				System.out.print(", ");
@@ -172,7 +173,7 @@ public class TextClient {
 		Boolean gameOver = false;
 		setup();
 
-		// Print banner ;)
+		// Print banner
 		System.out.println("*** Cluedo Version 1.0 ***");
 		System.out.println("By Chris Read and Sarah Dobie, 2015");
 
@@ -183,27 +184,26 @@ public class TextClient {
 		}
 		LinkedList<Player> players = inputPlayers(nplayers);
 		game.setPlayers(players);
+		game.dealCards(players);
 
 		// now, begin the game!
 		int turn = 1;
 		Random dice = new Random();
 		while (!gameOver) { // loop as long as the game is playing
-			System.out.println("\n********************");
-			System.out.println("***** TURN " + turn + " *******");
-			System.out.println("********************\n");
 			boolean firstTime = true;
-			for (Player player : players) {
-				if (!firstTime) {
-					System.out.println("\n********************\n");
-				}
-				firstTime = false;
-				int roll = dice.nextInt(6) + 1;
-				System.out.println(player.getName() + " rolls a " + roll + ".");
-				// display player's options
-				playerOptions(player, game, roll, gameOver);
-				// TODO escape from loop when correct accusation made (make accuse method)
+			Player player = players.peek();
+			if (!firstTime) {
+				System.out.println("\n********************\n");
 			}
-			turn++;
+			firstTime = false;
+			int roll = dice.nextInt(10) + 2;
+			System.out.println(player.getName() + " rolls a " + roll + ".");
+			// display player's options
+			playerOptions(player, game, roll, gameOver);
+			// TODO escape from loop when correct accusation made (make accuse method)
+			// move player to end of queue
+			players.remove(player);
+			players.add(player);
 		}
 	}
 
@@ -215,13 +215,16 @@ public class TextClient {
 	 */
 	private static void playerOptions(Player player, GameOfCluedo game, int roll, boolean gameOver) {
 		System.out.println();
-		List<String> options = new ArrayList<String>(); // stores options available
 		Board board = game.getBoard();
+		boolean endTurn = false;
 		
-		outer: for(int i=roll; i>0; i--){
+		outer: for(int i=roll; i>0 && !endTurn; i--){
+			List<String> options = new ArrayList<String>(); // stores options available
 			int pr = player.row();
 			int pc = player.column();
 			game.drawBoard();
+			System.out.println();
+			System.out.println(i +" turns remaining");
 			System.out.println("Options:");
 			
 			// check the directions the player can move in
@@ -247,6 +250,9 @@ public class TextClient {
 				}
 			}
 			
+			System.out.println("E: End turn");
+			options.add("E");
+			
 			System.out.println();
 			
 			// receive user input
@@ -268,6 +274,7 @@ public class TextClient {
 			case ("A") : makeAccusation(player, game); /*gameOver = true;*/ break outer;
 			case ("M") : makeSuggestion(player, game); break;
 			case ("S") : takeShortcut(player); break;
+			case ("E") : endTurn = true; break;
 			
 			}
 		}
@@ -450,7 +457,7 @@ public class TextClient {
 	 */
 	public static String selectCharacter(){
 		// Display options for the player to select a character
-		printOptions(simpleCharacters);
+		printList(simpleCharacters);
 		String character = inputString("Enter the character's name: ");
 		character = simpleToFullName(character);
 		// check for invalid character
@@ -467,7 +474,7 @@ public class TextClient {
 	 */
 	public static String selectWeapon(){
 		// Display options for the player to select a weapon
-		printOptions(weapons);
+		printList(weapons);
 		String weapon = inputString("Enter the weapon: ");
 		weapon = simpleToFullWeapon(weapon);
 		while (weapon == ""){
@@ -483,7 +490,7 @@ public class TextClient {
 	 */
 	public static String selectRoom(){
 		// Display options for the player to select a room
-		printOptions(rooms);
+		printList(rooms);
 		String room = inputString("Enter the room: ");
 		room = simpleToFullRoom(room);
 		while (room == ""){
@@ -503,19 +510,34 @@ public class TextClient {
 	private static void makeSuggestion(Player player, GameOfCluedo game) {
 		System.out.println();
 		System.out.println("Suggest a character, weapon and room:");
+		System.out.println();
+		
 		String character = selectCharacter();
+		System.out.println();
+		
 		String weapon = selectWeapon();
+		System.out.println();
+		
 		String room = selectRoom();
+		System.out.println();
+		
+		// iterate over players' hands to find a matching card
 		for (Player p : game.getPlayers()){
 			if (p != player){
 				for (Card c : p.getHand()){
 					String cardName = c.getName();
-					if (cardName.equals(character) || cardName.equals(weapon) || cardName.equals(room)){
+					if ((cardName.equals(character) || cardName.equals(weapon) || cardName.equals(room))
+							&& !p.hasSeenCard(c)){
 						System.out.println(p.getName() + " has the card: " + cardName); //FIXME players get to choose card to show
+						p.addCardSeen(c);
+						return;
 					}
 				}
 			}
 		}
+		System.out.println();
+		System.out.println("No matching cards were found...");
+		System.out.println();
 	}
 
 	/**
@@ -529,11 +551,15 @@ public class TextClient {
 		// Print ominous message
 		System.out.println();
 		System.out.println("This is serious business... One of us could be the murderer!");
+		System.out.println();
 		// Prompt player to select cards
 		String[] accusation = new String[3];
 		accusation[0] = selectCharacter();
+		System.out.println();
 		accusation[1] = selectWeapon();
+		System.out.println();
 		accusation[2] = selectRoom();
+		System.out.println();
 		// make accusation
 		if (game.accuse(accusation)){
 			// player made a correct accusation and won the game
