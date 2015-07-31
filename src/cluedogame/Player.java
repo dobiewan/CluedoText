@@ -1,6 +1,8 @@
 package cluedogame;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import cluedogame.PlayerType;
@@ -10,8 +12,8 @@ public class Player {
 	
 	private String name; // which character playing as
 	private char number; // the number displayed on the board
-	private Set<Card> hand; // cards in the player's hand
-	private Set<Card> cardsSeen; // cards the player has seen
+	private List<Card> hand; // cards in the player's hand
+	private List<Card> cardsSeen; // cards the player has seen
 	
 	private int cPosition; // the player's current column pos
 	private int rPosition; // the player's current row pos
@@ -25,8 +27,8 @@ public class Player {
 		super();
 		this.name = name;
 		this.number = number;
-		this.hand = new HashSet<Card>();
-		this.cardsSeen = new HashSet<Card>();
+		this.hand = new ArrayList<Card>();
+		this.cardsSeen = new ArrayList<Card>();
 		this.cPosition = startCol(this.name);
 		this.rPosition = startRow(this.name);
 	}
@@ -35,8 +37,40 @@ public class Player {
 	 * gets the cards in the current players hand
 	 * @return the cards in hand
 	 */
-	public Set<Card> getHand(){
+	public List<Card> getHand(){
 		return hand;
+	}
+	
+	/**
+	 * gets the names of cards in the current players hand
+	 * @return the names of the cards in hand
+	 */
+	public List<String> getHandStrings(){
+		List<String> handStrings = new ArrayList<String>();
+		for(Card c : hand){
+			handStrings.add(c.getName());
+		}
+		return handStrings;
+	}
+	
+	/**
+	 * gets all the cards the player has seen
+	 * @return the cards the player has seen
+	 */
+	public List<Card> getCardsSeen(){
+		return hand;
+	}
+	
+	/**
+	 * gets the names of cards the player has seen
+	 * @return the names of cards the player has seen
+	 */
+	public List<String> getCardsSeenStrings(){
+		List<String> cardStrings = new ArrayList<String>();
+		for(Card c : cardsSeen){
+			cardStrings.add(c.getName());
+		}
+		return cardStrings;
 	}
 	
 	/**

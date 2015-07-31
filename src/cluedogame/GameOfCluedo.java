@@ -121,6 +121,15 @@ public class GameOfCluedo {
 		return true;
 	}
 	
+	/**
+	 * Prints out the murderer, their weapon and room.
+	 */
+	public void printMurder(){
+		System.out.println(murderCards[0] +
+				" used the " + murderCards[1] +
+				" in the " + murderCards[2] + "!");
+	}
+	
 	public Board getBoard(){
 		return board;
 	}
@@ -158,15 +167,6 @@ public class GameOfCluedo {
 			p.addCard(roomCards.remove(0));
 			dealTo.add(p);
 		}
-		
-//		for(Player p : players){
-//			System.out.println();
-//			System.out.println(p.getName());
-//			System.out.println();
-//			for(Card c: p.getHand()){
-//				System.out.println(c.getName());
-//			}
-//		}
 	}
 	
 }

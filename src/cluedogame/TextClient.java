@@ -118,6 +118,14 @@ public class TextClient {
 	}
 	
 	/**
+	 * Pauses the game until the user presses the enter key.
+	 */
+	private static void waitToContinue(){
+		inputString("** Press enter to continue **");
+		System.out.println();
+	}
+	
+	/**
 	 * Collect player details from user input
 	 */
 	private static LinkedList<Player> inputPlayers(int nplayers) {
@@ -168,52 +176,14 @@ public class TextClient {
 		System.out.println();
 	}
 	
-	public static void main(String args[]) {
-		GameOfCluedo game = new GameOfCluedo();
-		Boolean gameOver = false;
-		setup();
-
-		// Print banner
-		System.out.println("*** Cluedo Version 1.0 ***");
-		System.out.println("By Chris Read and Sarah Dobie, 2015");
-
-		// input player info
-		int nplayers = inputNumber("How many players?");
-		while(nplayers < 2 || nplayers > 6){
-			nplayers = inputNumber("There must be 2-6 players. Try again: ");
-		}
-		LinkedList<Player> players = inputPlayers(nplayers);
-		game.setPlayers(players);
-		game.dealCards(players);
-
-		// now, begin the game!
-		int turn = 1;
-		Random dice = new Random();
-		while (!gameOver) { // loop as long as the game is playing
-			boolean firstTime = true;
-			Player player = players.peek();
-			if (!firstTime) {
-				System.out.println("\n********************\n");
-			}
-			firstTime = false;
-			int roll = dice.nextInt(10) + 2;
-			System.out.println(player.getName() + " rolls a " + roll + ".");
-			// display player's options
-			playerOptions(player, game, roll, gameOver);
-			// TODO escape from loop when correct accusation made (make accuse method)
-			// move player to end of queue
-			players.remove(player);
-			players.add(player);
-		}
-	}
-
 	/**
 	 * Provides the player with all possible actions they may take.
 	 * @param player The player whose turn it is.
 	 * @param game The current game of Cluedo.
 	 * @param roll The number rolled by the dice.
 	 */
-	private static void playerOptions(Player player, GameOfCluedo game, int roll, boolean gameOver) {
+	private static void playerOptions(Player player, LinkedList<Player> playersInGame,
+			GameOfCluedo game, int roll, boolean gameOver) {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
@@ -230,6 +200,14 @@ public class TextClient {
 			// check the directions the player can move in
 			availableDirections(board, pr, pc, options);
 			
+			// option to look at player hand
+			System.out.println("H : View hand");
+			options.add("H");
+			
+			// option to look at all cards player has seen
+			System.out.println("C : View all cards seen");
+			options.add("C");
+			
 			// check if the player can make an accusation
 			System.out.println("A : Make an accusation");
 			options.add("A");
@@ -241,7 +219,7 @@ public class TextClient {
 				System.out.println("M : Make an accusatory suggestion");
 				options.add("M");
 				
-				//TODO leave room
+				//TODO leave room(?)
 				
 				// check for a shortcut in the room
 				if(sq.shortcut() != null){
@@ -250,31 +228,31 @@ public class TextClient {
 				}
 			}
 			
-			System.out.println("E: End turn");
-			options.add("E");
+//			System.out.println("E: End turn");
+//			options.add("E");
 			
 			System.out.println();
 			
 			// receive user input
 			String choice = inputString("What will "+player.getName()+" do?");
 			// check input is valid
-			while(!options.contains(choice)){
+			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
 				choice = inputString("Invalid input. Please try again.");
 			}
 			
 			System.out.println();
 			
 			switch(choice){
-			case ("L") : player.moveLeft(); break;
-			case ("R") : player.moveRight(); break;
-			case ("U") : player.moveUp(); break;
-			case ("D") : player.moveDown(); break;
-			// while we shouldnt have the gameover here, since all players
-			// will be using the same screen it might as well be over
-			case ("A") : makeAccusation(player, game); /*gameOver = true;*/ break outer;
-			case ("M") : makeSuggestion(player, game); break;
-			case ("S") : takeShortcut(player); break;
-			case ("E") : endTurn = true; break;
+			case ("L") : case("l") : player.moveLeft(); break;
+			case ("R") : case("r") : player.moveRight(); break;
+			case ("U") : case("u") : player.moveUp(); break;
+			case ("D") : case("d") : player.moveDown(); break;
+			case ("H") : case("h") : printList(player.getHandStrings()); i++; break;
+			case ("C") : case("c") : printList(player.getCardsSeenStrings()); i++; break;
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver); break outer;
+			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
+			case ("S") : case("s") : takeShortcut(player); endTurn = true; break;
+//			case ("E") : endTurn = true; break;
 			
 			}
 		}
@@ -547,7 +525,8 @@ public class TextClient {
 	 * @param player
 	 * @param game
 	 */
-	private static void makeAccusation(Player player, GameOfCluedo game) {
+	private static void makeAccusation(Player player, LinkedList<Player> playersInGame,
+			GameOfCluedo game, Boolean gameOver) {
 		// Print ominous message
 		System.out.println();
 		System.out.println("This is serious business... One of us could be the murderer!");
@@ -563,17 +542,68 @@ public class TextClient {
 		// make accusation
 		if (game.accuse(accusation)){
 			// player made a correct accusation and won the game
-			System.out.println("You are correct!\n" + accusation[0] 
-					+ " used the " + accusation[1] + " in the " + accusation[2] + "!");
+			System.out.println("You are correct!");
+			game.printMurder();
+			gameOver = true;
 		} else {
 			// accusation was incorrect, insult player
 			System.out.println("You were wrong!\n ...you didn't really think this through...");
+			playersInGame.remove(player);
+			System.out.println();
+			System.out.println(player.getName() +" is out of the game!");
+			System.out.println();
 		}
-		// TODO player is out of game
 	}
 
 	private static void takeShortcut(Player player) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public static void main(String args[]) {
+		GameOfCluedo game = new GameOfCluedo();
+		Boolean gameOver = false;
+		setup();
+	
+		// Print banner
+		System.out.println("*** Cluedo Version 1.0 ***");
+		System.out.println("By Chris Read and Sarah Dobie, 2015");
+	
+		// input player info
+		int nplayers = inputNumber("How many players?");
+		while(nplayers < 2 || nplayers > 6){
+			nplayers = inputNumber("There must be 2-6 players. Try again: ");
+		}
+		LinkedList<Player> players = inputPlayers(nplayers); // all players
+		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
+		game.setPlayers(players);
+		game.dealCards(players);
+	
+		// begin the game
+		int turn = 1;
+		Random dice = new Random();
+		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
+			Player player = playersInGame.peek();
+			System.out.println(player.getName() +"'s turn!");
+			waitToContinue();
+			int roll = dice.nextInt(10) + 2;
+			System.out.println(player.getName() + " rolls a " + roll + ".");
+			// display player's options
+			playerOptions(player, playersInGame, game, roll, gameOver);
+			// TODO escape from loop when correct accusation made
+			// move player to end of queue
+			playersInGame.remove(player);
+			playersInGame.add(player);
+		}
+		// everyone's out and nobody made a correct accusation
+		if(playersInGame.size() == 0){
+			System.out.println("You didn't find the murderer!");
+			System.out.println("Luckily the police are more onto it than you lot!");
+			System.out.println();
+			System.out.println("Do you want to know who did it and how?");
+			waitToContinue();
+			System.out.println();
+			game.printMurder();
+		}
 	}
 }
