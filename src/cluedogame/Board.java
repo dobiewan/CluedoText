@@ -9,6 +9,11 @@ import java.util.Scanner;
 
 import cluedogame.sqaures.*;
 
+/**
+ * A 2D array representation of the Cluedo playing board.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class Board {
 	public static int ROWS = 25;
 	public static int COLS = 24;

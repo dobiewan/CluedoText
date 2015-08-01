@@ -10,7 +10,7 @@ import cluedogame.GameOfCluedo;
 
 /**
  * Some helper methods for the TextClient class.
- * @author Sarah
+ * @author Sarah Dobie, Chris Read
  *
  */
 public class TextHelpers {
@@ -60,9 +60,9 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Returns the given string with the first letter capitalised
-	 * @param s
-	 * @return
+	 * Returns the given String with the first letter capitalised
+	 * @param s The String to be capitalised.
+	 * @return The given String with the first letter in uppercase.
 	 */
 	static String capitalise(String s){
 		Character firstLetter = s.charAt(0);
@@ -72,8 +72,9 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Prints out a list nicely
-	 * @param The list to be printed
+	 * Prints out a list of Strings on one line with quotes around each item,
+	 * and a comma and space between each item.
+	 * @param list The list to be printed
 	 */
 	static void printList(List<String> list){
 		// print out each character name
@@ -224,8 +225,8 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Prompts the player to select a character by typing their name
-	 * @return the full name of the character
+	 * Prompts the player to select a character by typing their simple name.
+	 * @return The full name of the character
 	 */
 	static String selectCharacter(){
 		// Display options for the player to select a character
@@ -241,8 +242,8 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Prompts the player to select a weapon by typing its name
-	 * @return the full name of the weapon
+	 * Prompts the player to select a weapon by typing its name.
+	 * @return The full name of the weapon
 	 */
 	static String selectWeapon(){
 		// Display options for the player to select a weapon
@@ -257,8 +258,8 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Prompts the player to select a room by typing its name
-	 * @return the full name of the room
+	 * Prompts the player to select a room by typing its name.
+	 * @return The full name of the room
 	 */
 	static String selectRoom(){
 		// Display options for the player to select a room
@@ -273,7 +274,7 @@ public class TextHelpers {
 	}
 	
 	/**
-	 * Prints an end of game message
+	 * Prints an end of game message.
 	 */
 	static void gameOver(){
 		System.out.println("*******************");

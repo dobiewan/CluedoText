@@ -1,18 +1,19 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 import cluedogame.*;
 import cluedogame.cards.*;
 import cluedogame.sqaures.*;
 
+/**
+ * The user interface for the Cluedo game.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class TextClient {
 	static ArrayList<String> characters;
 	static ArrayList<String> simpleCharacters;
@@ -44,7 +45,6 @@ public class TextClient {
 		game.dealCards(players);
 	
 		// begin the game
-		int turn = 1;
 		Random dice = new Random();
 		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
 			Player player = playersInGame.peek();
@@ -52,7 +52,7 @@ public class TextClient {
 			System.out.println(player.getName() +"'s turn!");
 			TextHelpers.waitToContinue();
 			int roll = dice.nextInt(10) + 2;
-			System.out.println(player.getName() + " rolls a " + roll + ".");
+			System.out.println(player.getName() + " rolls " + roll + ".");
 			TextHelpers.waitToContinue();
 			// display player's options
 			playerOptions(player, playersInGame, game, roll);
@@ -114,7 +114,8 @@ public class TextClient {
 	/**
 	 * Provides the player with all possible actions they may take.
 	 * @param player The player whose turn it is.
-	 * @param game The current game of Cluedo.
+	 * @param playersInGame The players still in the game
+	 * @param game The current game of Cluedo
 	 * @param roll The number rolled by the dice.
 	 */
 	private static void playerOptions(Player player, LinkedList<Player> playersInGame,
@@ -152,7 +153,9 @@ public class TextClient {
 			
 			// check if the currrent square is a room
 			if(sq instanceof RoomSquare){
-				roomOptions(board, options, pr, pc);
+				// player can make a suggestion if in a room
+				System.out.println("M : Make an accusatory suggestion");
+				options.add("M");
 			}
 			
 			// check for a shortcut
@@ -193,27 +196,12 @@ public class TextClient {
 	}
 
 	/**
-	 * Extra player options if the player is in a room.
-	 * @param board
-	 * @param options
-	 * @param playerRow
-	 * @param playerCol
-	 */
-	private static void roomOptions(Board board, List<String> options,
-			int playerRow, int playerCol) {
-		RoomSquare sq = (RoomSquare)board.squareAt(playerRow, playerCol);
-		// player can make a suggestion if in a room
-		System.out.println("M : Make an accusatory suggestion");
-		options.add("M");
-	}
-
-	/**
 	 * Moves the player to the other end of the shortcut
 	 * @param player The player to move
-	 * @param sq The shortcut they are taking
+	 * @param shortcut The shortcut they are taking
 	 */
-	private static void takeShortcut(Player player, ShortcutSquare sq) {
-		player.setPos(sq.toRow(), sq.toCol());
+	private static void takeShortcut(Player player, ShortcutSquare shortcut) {
+		player.setPos(shortcut.toRow(), shortcut.toCol());
 	}
 
 	/**
@@ -222,7 +210,7 @@ public class TextClient {
 	 * @param board The board being played on
 	 * @param playerRow The player's current row position
 	 * @param playerCol The player's current column position
-	 * @param options The list of options available to the player
+	 * @param options The list of options currently available to the player
 	 */
 	private static void movementOptions(Board board, int playerRow,
 			int playerCol, List<String> options) {
@@ -387,10 +375,10 @@ public class TextClient {
 
 	/**
 	 * Prompts the player to enter a character, weapon and room and
-	 * checks whether the named cards are in any players hands.
+	 * checks whether the named cards are in any player's hands.
 	 * If so, adds them to the seen cards of the players
-	 * @param game 
-	 * @param current player
+	 * @param game The game being played
+	 * @param player The current player
 	 */
 	private static void makeSuggestion(Player player, GameOfCluedo game) {
 		System.out.println();
@@ -427,10 +415,10 @@ public class TextClient {
 
 	/**
 	 * Prompts the player to choose a character, weapon and room
-	 * and checks them against the murderer, murder weapon and murder location
-	 * If Successful, the player wins the game
-	 * @param player
-	 * @param game
+	 * and checks them against the murderer, murder weapon and murder location.
+	 * If successful, the player wins the game.
+	 * @param player The player making the accusation
+	 * @param game The game being played
 	 */
 	private static void makeAccusation(Player player, LinkedList<Player> playersInGame,
 			GameOfCluedo game) {
