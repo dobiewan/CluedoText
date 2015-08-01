@@ -1,7 +1,6 @@
 package cluedogame.sqaures;
 
 import cluedogame.GameOfCluedo;
-import cluedogame.RoomType;
 
 public class RoomWallSquare extends Square {
 

@@ -29,7 +29,7 @@ public class Board {
 			Scanner s = new Scanner(file);
 			// create queues of special squares
 			Queue<Character> title = titleChars();
-			Queue<PlayerType> players = startPlayers();
+//			Queue<String> players = startPlayers();
 			Queue<String> shortcuts = shortcutRooms();
 			// iterate over each row
 			for(int r = 0; r<board.length; r++){
@@ -43,8 +43,7 @@ public class Board {
 					board[r][c] = sq;
 				}
 			}
-				
-			
+			s.close();	
 		} catch(IOException e){
 			System.out.println("Error loading file: "+ e.getMessage());
 		}
@@ -98,22 +97,22 @@ public class Board {
 		return title;
 	}
 	
-	/**
-	 * Creates a queue containing the PlayerType at each player
-	 * start position, in the order that they will be parsed.
-	 * @return A queue containing the PlayerType at each player
-	 * start position, in the order that they will be parsed.
-	 */
-	private Queue<PlayerType> startPlayers(){
-		Queue<PlayerType> players = new LinkedList<PlayerType>();
-		players.add(PlayerType.MRS_WHITE);
-		players.add(PlayerType.REV_GREEN);
-		players.add(PlayerType.MRS_PEACOCK);
-		players.add(PlayerType.COL_MUSTARD);
-		players.add(PlayerType.PROF_PLUM);
-		players.add(PlayerType.MISS_SCARLETT);
-		return players;
-	}
+//	/**
+//	 * Creates a queue containing the PlayerType at each player
+//	 * start position, in the order that they will be parsed.
+//	 * @return A queue containing the PlayerType at each player
+//	 * start position, in the order that they will be parsed.
+//	 */
+//	private Queue<String> startPlayers(){
+//		Queue<String> players = new LinkedList<String>();
+//		players.add(GameOfCluedo.WHITE);
+//		players.add(GameOfCluedo.GREEN);
+//		players.add(GameOfCluedo.PEACOCK);
+//		players.add(GameOfCluedo.MUSTARD);
+//		players.add(GameOfCluedo.PLUM);
+//		players.add(GameOfCluedo.SCARLETT);
+//		return players;
+//	}
 	
 	/**
 	 * Creates a queue containing the RoomType at each shortcut

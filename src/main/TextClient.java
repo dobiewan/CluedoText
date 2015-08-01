@@ -1,4 +1,4 @@
-package cluedogame;
+package main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,116 +14,10 @@ import cluedogame.cards.*;
 import cluedogame.sqaures.*;
 
 public class TextClient {
-	public static ArrayList<String> characters;
-	public static ArrayList<String> simpleCharacters;
-	public static ArrayList<String> weapons;
-	public static ArrayList<String> rooms;
-	
-	/**
-	 * Adds relevant constants to lists of characters, weapons and rooms.
-	 */
-	private static void setup(){
-		setupCharacters();
-		setupSimpleCharacters();
-		setupWeapons();
-		setupRooms();
-	}
-
-	/**
-	 * Adds all room constants to list.
-	 */
-	private static void setupRooms() {
-		rooms = new ArrayList<String>();
-		rooms.add(GameOfCluedo.KITCHEN);
-		rooms.add(GameOfCluedo.BALL_ROOM);
-		rooms.add(GameOfCluedo.CONSERVATORY);
-		rooms.add(GameOfCluedo.BILLIARD_ROOM);
-		rooms.add(GameOfCluedo.LIBRARY);
-		rooms.add(GameOfCluedo.STUDY);
-		rooms.add(GameOfCluedo.HALL);
-		rooms.add(GameOfCluedo.LOUNGE);
-		rooms.add(GameOfCluedo.DINING_ROOM);
-	}
-
-	/**
-	 * Adds all weapon constants to list.
-	 */
-	private static void setupWeapons() {
-		weapons = new ArrayList<String>();
-		weapons.add(GameOfCluedo.CANDLESTICK);
-		weapons.add(GameOfCluedo.DAGGER);
-		weapons.add(GameOfCluedo.LEAD_PIPE);
-		weapons.add(GameOfCluedo.REVOLVER);
-		weapons.add(GameOfCluedo.ROPE);
-		weapons.add(GameOfCluedo.SPANNER);
-	}
-
-	/**
-	 * Adds all simplified character names to list
-	 */
-	private static void setupSimpleCharacters() {
-		simpleCharacters = new ArrayList<String>();
-		simpleCharacters.add("Scarlett");
-		simpleCharacters.add("Mustard");
-		simpleCharacters.add("White");
-		simpleCharacters.add("Green");
-		simpleCharacters.add("Peacock");
-		simpleCharacters.add("Plum");
-	}
-
-	/**
-	 * Adds all character constants to list.
-	 */
-	private static void setupCharacters() {
-		characters = new ArrayList<String>();
-		characters.add(GameOfCluedo.SCARLETT);
-		characters.add(GameOfCluedo.MUSTARD);
-		characters.add(GameOfCluedo.WHITE);
-		characters.add(GameOfCluedo.GREEN);
-		characters.add(GameOfCluedo.PEACOCK);
-		characters.add(GameOfCluedo.PLUM);
-	}
-
-	/**
-	 * Get integer from user input
-	 */
-	private static int inputNumber(String msg) {
-		System.out.print(msg + " ");
-		while (true) {
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					System.in));
-			try {
-				String v = input.readLine();
-				return Integer.parseInt(v);
-			} catch (IOException e) {
-				System.out.println("Please enter a number.");
-			}
-		}
-	}
-
-	/**
-	 * Get string from user input
-	 */
-	private static String inputString(String msg) {
-		System.out.print(msg + " ");
-		while (true) {
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					System.in));
-			try {
-				return input.readLine();
-			} catch (IOException e) {
-				System.out.println("There's been an error. Please try again.");
-			}
-		}
-	}
-	
-	/**
-	 * Pauses the game until the user presses the enter key.
-	 */
-	private static void waitToContinue(){
-		inputString("** Press enter to continue **");
-		System.out.println();
-	}
+	static ArrayList<String> characters;
+	static ArrayList<String> simpleCharacters;
+	static ArrayList<String> weapons;
+	static ArrayList<String> rooms;
 	
 	/**
 	 * Collect player details from user input
@@ -134,46 +28,28 @@ public class TextClient {
 		
 		// list characters to choose from
 		System.out.println("The characters you may choose from are:");
-		printList(characters);
+		TextHelpers.printList(characters);
 
 		LinkedList<Player> players = new LinkedList<Player>();
 
 		// ask each player for details
 		for (int i = 1; i <= nplayers; i++) {
-			String chosenCharacter = inputString("Player #" + i + " character?");
+			String chosenCharacter = TextHelpers.inputString("Player #" + i + " character?");
 			// check validity of character
 			if (!characters.contains(chosenCharacter)) {
 				System.out.print("That's not a valid character. Please choose one of: ");
-				printList(characters);
+				TextHelpers.printList(characters);
 				System.out.println();
 				// ask again
-				chosenCharacter = inputString("Player #" + i + " token?");
-				chosenCharacter = simpleToFullName(chosenCharacter);
+				chosenCharacter = TextHelpers.inputString("Player #" + i + " token?");
+				chosenCharacter = TextHelpers.simpleToFullName(chosenCharacter);
 			}
 			
 			characters.remove(chosenCharacter); // the chosen character is no longer available
-			chosenCharacter = simpleToFullName(chosenCharacter);
+			chosenCharacter = TextHelpers.simpleToFullName(chosenCharacter);
 			players.add(new Player(chosenCharacter, Character.forDigit(i, 10))); // create the Player object
 		}
 		return players;
-	}
-	
-	/**
-	 * Prints out a list nicely
-	 * @param The list to be printed
-	 */
-	private static void printList(List<String> list){
-		// print out each character name
-		boolean firstTime = true;
-		for (String s : list) {
-			if (!firstTime) {
-				// print a comma if appropriate
-				System.out.print(", ");
-			}
-			firstTime = false;
-			System.out.print("\"" + s + "\"");
-		}
-		System.out.println();
 	}
 	
 	/**
@@ -188,17 +64,19 @@ public class TextClient {
 		Board board = game.getBoard();
 		boolean endTurn = false;
 		
+		// go until it's no longer the player's turn
 		outer: for(int i=roll; i>0 && !endTurn; i--){
 			List<String> options = new ArrayList<String>(); // stores options available
 			int pr = player.row();
 			int pc = player.column();
 			game.drawBoard();
+			
 			System.out.println();
 			System.out.println(i +" turns remaining");
 			System.out.println("Options:");
 			
 			// check the directions the player can move in
-			availableDirections(board, pr, pc, options);
+			movementOptions(board, pr, pc, options);
 			
 			// option to look at player hand
 			System.out.println("H : View hand");
@@ -208,36 +86,22 @@ public class TextClient {
 			System.out.println("C : View all cards seen");
 			options.add("C");
 			
-			// check if the player can make an accusation
+			// option to make accusation
 			System.out.println("A : Make an accusation");
 			options.add("A");
 			
 			// check if the currrent square is a room
 			if(board.squareAt(pr, pc) instanceof RoomSquare){
-				RoomSquare sq = (RoomSquare)board.squareAt(pr, pc);
-				// player can make a suggestion if in a room
-				System.out.println("M : Make an accusatory suggestion");
-				options.add("M");
-				
-				//TODO leave room(?)
-				
-				// check for a shortcut in the room
-				if(sq.shortcut() != null){
-					System.out.println("S : Take a shortcut");
-					options.add("S");
-				}
+				roomOptions(board, options, pr, pc);
 			}
-			
-//			System.out.println("E: End turn");
-//			options.add("E");
 			
 			System.out.println();
 			
 			// receive user input
-			String choice = inputString("What will "+player.getName()+" do?");
+			String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
 			// check input is valid
 			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
-				choice = inputString("Invalid input. Please try again.");
+				choice = TextHelpers.inputString("Invalid input. Please try again.");
 			}
 			
 			System.out.println();
@@ -247,16 +111,67 @@ public class TextClient {
 			case ("R") : case("r") : player.moveRight(); break;
 			case ("U") : case("u") : player.moveUp(); break;
 			case ("D") : case("d") : player.moveDown(); break;
-			case ("H") : case("h") : printList(player.getHandStrings()); i++; break;
-			case ("C") : case("c") : printList(player.getCardsSeenStrings()); i++; break;
+			case ("H") : case("h") : TextHelpers.printList(player.getHandStrings()); i++; break;
+			case ("C") : case("c") : TextHelpers.printList(player.getCardsSeenStrings()); i++; break;
 			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver); break outer;
 			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player); endTurn = true; break;
-//			case ("E") : endTurn = true; break;
-			
 			}
 		}
+		endOfTurnOptions(player, playersInGame, game, gameOver);
+	}
+
+	/**
+	 * @param player
+	 * @param playersInGame
+	 * @param game
+	 * @param gameOver
+	 */
+	private static void endOfTurnOptions(Player player,
+			LinkedList<Player> playersInGame, GameOfCluedo game,
+			boolean gameOver) {
+		if(playersInGame.contains(player)){
+			List<String> options = new ArrayList<String>(); // stores options available
+			
+			// option to make accusation
+			System.out.println("A : Make an accusation");
+			options.add("A");
+
+			System.out.println("E: End turn");
+			options.add("E");
+			
+			String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
+			// check input is valid
+			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
+				choice = TextHelpers.inputString("Invalid input. Please try again.");
+			}
+			
+			switch(choice){
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver);
+			}
+		}
+	}
+
+	/**
+	 * @param board
+	 * @param options
+	 * @param playerRow
+	 * @param playerCol
+	 */
+	private static void roomOptions(Board board, List<String> options,
+			int playerRow, int playerCol) {
+		RoomSquare sq = (RoomSquare)board.squareAt(playerRow, playerCol);
+		// player can make a suggestion if in a room
+		System.out.println("M : Make an accusatory suggestion");
+		options.add("M");
 		
+		//TODO leave room(?)
+		
+		// check for a shortcut in the room
+		if(sq.shortcut() != null){
+			System.out.println("S : Take a shortcut");
+			options.add("S");
+		}
 	}
 
 	/**
@@ -267,7 +182,7 @@ public class TextClient {
 	 * @param playerCol The player's current column position
 	 * @param options The list of options available to the player
 	 */
-	private static void availableDirections(Board board, int playerRow,
+	private static void movementOptions(Board board, int playerRow,
 			int playerCol, List<String> options) {
 		// left
 		if(canMoveLeft(playerRow, playerCol, board)){
@@ -357,126 +272,7 @@ public class TextClient {
 		} catch(ArrayIndexOutOfBoundsException e){
 			return false;
 		}
-	}
-	
-	/**
-	 * Converts a simplified name, (eg. "Scarlett") into the full name,
-	 * (eg. "Miss Scarlett").
-	 * @param name The simplified name to convert.
-	 * @return The full version of the simplified name.
-	 */
-	public static String simpleToFullName(String name){
-		switch(name){
-		case GameOfCluedo.SCARLETT:
-		case "Scarlett" : return GameOfCluedo.SCARLETT;
-		case GameOfCluedo.MUSTARD:
-		case "Mustard" : return GameOfCluedo.MUSTARD;
-		case GameOfCluedo.WHITE:
-		case "White" : return GameOfCluedo.WHITE;
-		case GameOfCluedo.GREEN:
-		case "Reverend Green":
-		case "Green" : return GameOfCluedo.GREEN;
-		case GameOfCluedo.PEACOCK:
-		case "Peacock" : return GameOfCluedo.PEACOCK;
-		case GameOfCluedo.PLUM:
-		case "Plum" : return GameOfCluedo.PLUM;
-		default : return "";
-		}
-		
-	}
-	
-	/**
-	 * Converts a simplified weapon, (eg. "Pipe") into the full name,
-	 * (eg. "Lead Pipe").
-	 * @param name The simplified weapon name to convert.
-	 * @return The full version of the simplified weapon name.
-	 */
-	public static String simpleToFullWeapon(String weapon){
-		switch(weapon){
-		case GameOfCluedo.CANDLESTICK : case "candlestick" : return GameOfCluedo.CANDLESTICK;
-		case GameOfCluedo.DAGGER: case "dagger": return GameOfCluedo.DAGGER;
-		case GameOfCluedo.REVOLVER : case "revolver" : return GameOfCluedo.REVOLVER;
-		case GameOfCluedo.ROPE : case "rope": return GameOfCluedo.ROPE;
-		case GameOfCluedo.SPANNER : case "spanner" : return GameOfCluedo.SPANNER;
-		case GameOfCluedo.LEAD_PIPE : case "Pipe" : case "pipe": case "lead pipe" : return GameOfCluedo.LEAD_PIPE;
-		default : return "";
-		}
-	}
-	
-	/**
-	 * Converts a simplified room, (eg. "billiard") into the full name,
-	 * (eg. "Billiard Room").
-	 * @param name The simplified room name to convert.
-	 * @return The full version of the simplified room name.
-	 */
-	public static String simpleToFullRoom(String room){
-		switch(room){
-		case GameOfCluedo.CONSERVATORY : case "conservatory" :
-			return GameOfCluedo.CONSERVATORY;
-		case GameOfCluedo.LIBRARY : case "library": return GameOfCluedo.LIBRARY;
-		case GameOfCluedo.STUDY : case "study" : return GameOfCluedo.STUDY;
-		case GameOfCluedo.HALL: case "hall": return GameOfCluedo.HALL;
-		case GameOfCluedo.LOUNGE : case "lounge" : return GameOfCluedo.LOUNGE;
-		case GameOfCluedo.KITCHEN : case "kitchen" : return GameOfCluedo.KITCHEN;
-		case GameOfCluedo.BILLIARD_ROOM : case "billiard room" :
-			case "Billiard": case "billiard" : return GameOfCluedo.BILLIARD_ROOM;
-		case GameOfCluedo.DINING_ROOM: case "dining room" : case "Dining":
-			case "dining" : return GameOfCluedo.DINING_ROOM;
-		case GameOfCluedo.BALL_ROOM: case "ball room" : case "Ball":
-			case "ball" : return GameOfCluedo.BALL_ROOM;
-		default : return "";
-		}
-	}
-	
-	
-	/**
-	 * Prompts the player to select a character by typing their name
-	 * @return the full name of the character
-	 */
-	public static String selectCharacter(){
-		// Display options for the player to select a character
-		printList(simpleCharacters);
-		String character = inputString("Enter the character's name: ");
-		character = simpleToFullName(character);
-		// check for invalid character
-		while (character == ""){
-			character = inputString("Invalid input - please try again: ");
-			character = simpleToFullName(character);
-		}
-		return character;
-	}
-	
-	/**
-	 * Prompts the player to select a weapon by typing its name
-	 * @return the full name of the weapon
-	 */
-	public static String selectWeapon(){
-		// Display options for the player to select a weapon
-		printList(weapons);
-		String weapon = inputString("Enter the weapon: ");
-		weapon = simpleToFullWeapon(weapon);
-		while (weapon == ""){
-			weapon = inputString("Invalid input - please try again: ");
-			weapon = simpleToFullWeapon(weapon);
-		}
-		return weapon;
-	}
-	
-	/**
-	 * Prompts the player to select a room by typing its name
-	 * @return the full name of the room
-	 */
-	public static String selectRoom(){
-		// Display options for the player to select a room
-		printList(rooms);
-		String room = inputString("Enter the room: ");
-		room = simpleToFullRoom(room);
-		while (room == ""){
-			room = inputString("Invalid input - please try again: ");
-			room = simpleToFullRoom(room);
-		}
-		return room;
-	}
+	}	
 
 	/**
 	 * Prompts the player to enter a character, weapon and room and
@@ -490,13 +286,13 @@ public class TextClient {
 		System.out.println("Suggest a character, weapon and room:");
 		System.out.println();
 		
-		String character = selectCharacter();
+		String character = TextHelpers.selectCharacter();
 		System.out.println();
 		
-		String weapon = selectWeapon();
+		String weapon = TextHelpers.selectWeapon();
 		System.out.println();
 		
-		String room = selectRoom();
+		String room = TextHelpers.selectRoom();
 		System.out.println();
 		
 		// iterate over players' hands to find a matching card
@@ -533,11 +329,11 @@ public class TextClient {
 		System.out.println();
 		// Prompt player to select cards
 		String[] accusation = new String[3];
-		accusation[0] = selectCharacter();
+		accusation[0] = TextHelpers.selectCharacter();
 		System.out.println();
-		accusation[1] = selectWeapon();
+		accusation[1] = TextHelpers.selectWeapon();
 		System.out.println();
-		accusation[2] = selectRoom();
+		accusation[2] = TextHelpers.selectRoom();
 		System.out.println();
 		// make accusation
 		if (game.accuse(accusation)){
@@ -563,16 +359,16 @@ public class TextClient {
 	public static void main(String args[]) {
 		GameOfCluedo game = new GameOfCluedo();
 		Boolean gameOver = false;
-		setup();
+		TextHelpers.setup();
 	
 		// Print banner
 		System.out.println("*** Cluedo Version 1.0 ***");
 		System.out.println("By Chris Read and Sarah Dobie, 2015");
 	
 		// input player info
-		int nplayers = inputNumber("How many players?");
+		int nplayers = TextHelpers.inputNumber("How many players?");
 		while(nplayers < 2 || nplayers > 6){
-			nplayers = inputNumber("There must be 2-6 players. Try again: ");
+			nplayers = TextHelpers.inputNumber("There must be 2-6 players. Try again: ");
 		}
 		LinkedList<Player> players = inputPlayers(nplayers); // all players
 		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
@@ -585,7 +381,7 @@ public class TextClient {
 		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
 			Player player = playersInGame.peek();
 			System.out.println(player.getName() +"'s turn!");
-			waitToContinue();
+			TextHelpers.waitToContinue();
 			int roll = dice.nextInt(10) + 2;
 			System.out.println(player.getName() + " rolls a " + roll + ".");
 			// display player's options
@@ -601,7 +397,7 @@ public class TextClient {
 			System.out.println("Luckily the police are more onto it than you lot!");
 			System.out.println();
 			System.out.println("Do you want to know who did it and how?");
-			waitToContinue();
+			TextHelpers.waitToContinue();
 			System.out.println();
 			game.printMurder();
 		}

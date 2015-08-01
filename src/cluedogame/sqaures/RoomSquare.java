@@ -1,7 +1,6 @@
 package cluedogame.sqaures;
 
 import cluedogame.Board;
-import cluedogame.RoomType;
 import cluedogame.*;
 
 /**

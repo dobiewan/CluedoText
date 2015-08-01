@@ -1,7 +1,6 @@
 package cluedogame.sqaures;
 
 import cluedogame.Board;
-import cluedogame.RoomType;
 
 public class ShortcutSquare extends Square {
 	
