@@ -120,7 +120,7 @@ public class TextClient {
 	 * @param roll The number rolled by the dice.
 	 */
 	private static void playerOptions(Player player,
-			LinkedList<Player> playersInGame, GameOfCluedo game, int roll) {
+			List<Player> playersInGame, GameOfCluedo game, int roll) {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
