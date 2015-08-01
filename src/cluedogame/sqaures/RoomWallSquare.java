@@ -2,10 +2,20 @@ package cluedogame.sqaures;
 
 import cluedogame.GameOfCluedo;
 
+/**
+ * Represents the wall of a certain room, which players cannot
+ * walk through.
+ * @author Sarah
+ *
+ */
 public class RoomWallSquare extends Square {
 
 	private String room;
 	
+	/**
+	 * Constructor for class RoomWallSquare.
+	 * @param room The room this square is walling
+	 */
 	public RoomWallSquare(String room){
 		super(false);
 		this.room = room;

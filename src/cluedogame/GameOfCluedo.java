@@ -4,6 +4,13 @@ import java.util.*;
 
 import cluedogame.cards.*;
 
+/**
+ * Represents a game of Cluedo. Stores names of all players,
+ * weapons and rooms, as well as the cards in the game, and
+ * the murder cards. Organises the distribution of cards.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class GameOfCluedo {
 	public static final int TOTAL_NUM_CARDS = 21;
 	
@@ -38,9 +45,11 @@ public class GameOfCluedo {
 	private List<Card> roomCards;
 	private List<Card> weaponCards;
 	private Card[] murderCards = new Card[3];
-	private List<Player> players;
 	private Board board;
 	
+	/**
+	 * Constructor for class GameOfCluedo
+	 */
 	public GameOfCluedo(){
 		this.board = new Board();
 		setupCards();
@@ -108,44 +117,10 @@ public class GameOfCluedo {
 	}
 	
 	/**
-	 * checks an accusation against the murder cards
-	 * @param String array containing the character, weapon and room in that order
-	 * @return true only if all three cards are correct
+	 * Evenly deals out each type of card to every player,
+	 * until there are no cards left.
+	 * @param players The players in the game.
 	 */
-	public boolean accuse(String[] accusation){
-		for (int i = 0; i < murderCards.length; i++){
-			if (!accusation[i].equals(murderCards[i].getName())){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Prints out the murderer, their weapon and room.
-	 */
-	public void printMurder(){
-		System.out.println(murderCards[0].getName() +
-				" used the " + murderCards[1].getName() +
-				" in the " + murderCards[2].getName() + "!");
-	}
-	
-	public Board getBoard(){
-		return board;
-	}
-	
-	public void setPlayers(List<Player> players){
-		this.players = players;
-	}
-	
-	public List<Player> getPlayers(){
-		return players;
-	}
-
-	public void drawBoard() {
-		board.draw(players);
-	}
-
 	public void dealCards(List<Player> players) {
 		Queue<Player> dealTo = new LinkedList<Player>();
 		dealTo.addAll(players);
@@ -167,6 +142,44 @@ public class GameOfCluedo {
 			p.addCard(roomCards.remove(0));
 			dealTo.add(p); // put player on end of queue
 		}
+	}
+
+	/**
+	 * Checks an accusation against the murder cards.
+	 * @param accusation String array containing the character, weapon and room in that order.
+	 * @return True if only if all three cards are correct
+	 */
+	public boolean accuse(String[] accusation){
+		for (int i = 0; i < murderCards.length; i++){
+			if (!accusation[i].equals(murderCards[i].getName())){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Prints out the murderer, their weapon and room.
+	 */
+	public void printMurder(){
+		System.out.println(murderCards[0].getName() +
+				" used the " + murderCards[1].getName() +
+				" in the " + murderCards[2].getName() + "!");
+	}
+	
+	/**
+	 * Displays the board on the console.
+	 */
+	public void drawBoard(List<Player> players) {
+		board.draw(players);
+	}
+
+	/**
+	 * Gets this game's board.
+	 * @return The board being used by the game.
+	 */
+	public Board getBoard(){
+		return board;
 	}
 	
 }

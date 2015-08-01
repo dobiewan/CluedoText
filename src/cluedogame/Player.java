@@ -5,6 +5,11 @@ import java.util.List;
 
 import cluedogame.cards.*;
 
+/**
+ * Represents a player in a game of Cluedo.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class Player {
 	
 	private String name; // which character playing as
@@ -31,16 +36,16 @@ public class Player {
 	}
 	
 	/**
-	 * gets the cards in the current players hand
-	 * @return the cards in hand
+	 * Gets the cards in the this player's hand.
+	 * @return The cards in the player's hand
 	 */
 	public List<Card> getHand(){
 		return hand;
 	}
 	
 	/**
-	 * gets the names of cards in the current players hand
-	 * @return the names of the cards in hand
+	 * Gets the names of cards in this player's hand.
+	 * @return The names of the cards in the player's hand
 	 */
 	public List<String> getHandStrings(){
 		List<String> handStrings = new ArrayList<String>();
@@ -48,14 +53,6 @@ public class Player {
 			handStrings.add(c.getName());
 		}
 		return handStrings;
-	}
-	
-	/**
-	 * gets all the cards the player has seen
-	 * @return the cards the player has seen
-	 */
-	public List<Card> getCardsSeen(){
-		return hand;
 	}
 	
 	/**
@@ -71,32 +68,32 @@ public class Player {
 	}
 	
 	/**
-	 * returns the column, or X position of the player
-	 * @return the current column of the player
+	 * Returns the column, or X position of the player.
+	 * @return The current column of the player
 	 */
 	public int column(){
 		return cPosition;
 	}
 	
 	/**
-	 * returns the row, or Y position of the player
-	 * @return the current row of the player
+	 * Returns the row, or Y position of the player.
+	 * @return The current row of the player
 	 */
 	public int row(){
 		return rPosition;
 	}
 	
 	/**
-	 * gets the ID number (represented as a char)
-	 * @return Player ID
+	 * Gets the player's ID number (represented as a char)
+	 * @return The player's ID
 	 */
 	public char ID(){
 		return number;
 	}
 	
 	/**
-	 * gets the game of the player character
-	 * @return player character name
+	 * Gets the name of the player character.
+	 * @return Player character name
 	 */
 	public String getName(){
 		return name;
@@ -138,7 +135,7 @@ public class Player {
 	}
 
 	/**
-	 * moves the player character left one space on the game board
+	 * Moves the player character left one space on the game board.
 	 */
 	public void moveLeft() {
 		this.cPosition -= 1;
@@ -146,7 +143,7 @@ public class Player {
 	}
 
 	/**
-	 * moves the player character right one space on the game board
+	 * Moves the player character right one space on the game board.
 	 */
 	public void moveRight() {
 		this.cPosition += 1;
@@ -154,7 +151,7 @@ public class Player {
 	}
 
 	/**
-	 * moves the player character up one space on the game board
+	 * Moves the player character up one space on the game board.
 	 */
 	public void moveUp() {
 		this.rPosition -= 1;
@@ -162,7 +159,7 @@ public class Player {
 	}
 
 	/**
-	 * moves the player character down one space on the game board
+	 * Moves the player character down one space on the game board.
 	 */
 	public void moveDown() {
 		this.rPosition += 1;
@@ -170,8 +167,8 @@ public class Player {
 	}
 	
 	/**
-	 * Sets the player's position to the given row and col if they
-	 * are within bounds.
+	 * Sets the player's position to the given row and col (if
+	 * within bounds).
 	 * @param row The player's new row
 	 * @param col The player's new column
 	 */
@@ -183,15 +180,28 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Adds a card to the player's hand
+	 * @param c Card to add
+	 */
 	public void addCard(Card c){
 		hand.add(c);
 		cardsSeen.add(c);
 	}
 	
+	/**
+	 * Adds a card to the list of card the player has seen.
+	 * @param c Card to add
+	 */
 	public void addCardSeen(Card c){
 		cardsSeen.add(c);
 	}
 	
+	/**
+	 * Returns true if the player has seen the given card.
+	 * @param c The card to look for
+	 * @return True if the player has seen the card; false otherwise.
+	 */
 	public boolean hasSeenCard(Card c){
 		return cardsSeen.contains(c);
 	}

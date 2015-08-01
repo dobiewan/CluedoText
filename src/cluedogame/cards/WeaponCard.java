@@ -1,13 +1,19 @@
 package cluedogame.cards;
 
+/**
+ * A card which only represents a Weapon, eg. "Dagger",
+ * "Candlestick".
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class WeaponCard extends Card {
 
+	/**
+	 * Constructor for class WeaponCard.
+	 * @param name The name of the weapon represented.
+	 */
 	public WeaponCard(String name) {
 		super(name);
-	}
-	
-	public WeaponCard(String name, boolean partOfMurder){
-		super(name, partOfMurder);
 	}
 
 	@Override

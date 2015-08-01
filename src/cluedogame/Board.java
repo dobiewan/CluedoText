@@ -20,6 +20,9 @@ public class Board {
 	
 	private Square[][] board = new Square[ROWS][COLS];
 	
+	/**
+	 * Constructor for class Board.
+	 */
 	public Board(){
 		File f = new File("boardFile.txt");
 		parse(f);
@@ -43,7 +46,7 @@ public class Board {
 				for(int c=0; c < board[0].length; c++){
 					char code = line.charAt(c); // get the character in the file
 					// determine the Square corresponding to the code
-					Square sq = squareTypeFromCode(code, title, /*players,*/ shortcuts);
+					Square sq = squareTypeFromCode(code, title, shortcuts);
 					// add the square to the board
 					board[r][c] = sq;
 				}
@@ -54,8 +57,15 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Creates a new square based on the code read from the file.
+	 * @param code A character from the file
+	 * @param title The remaining letters of 'CLUEDO'
+	 * @param shortcuts The remaining shortcut rooms
+	 * @return A Square corresponding to the given code.
+	 */
 	private Square squareTypeFromCode(char code, Queue<Character> title,
-			/*Queue<PlayerType> players,*/ Queue<String> shortcuts) {
+			 Queue<String> shortcuts) {
 		Square sq = null;
 		switch(code){
 		case '/' : sq = new BlankSquare(); break;
@@ -63,7 +73,7 @@ public class Board {
 		case '?' : sq = new CharSquare('?'); break;
 		case '#' : sq = new CharSquare(title.poll()); break;
 		case '~' : sq = new ShortcutSquare(shortcuts.poll(), this); break;
-		case '*' : sq = new StarterSquare(/*players.poll()*/); break;
+		case '*' : sq = new StarterSquare(); break;
 		case 'K' : sq = new RoomWallSquare(GameOfCluedo.KITCHEN); break;
 		case 'B' : sq = new RoomWallSquare(GameOfCluedo.BALL_ROOM); break;
 		case 'C' : sq = new RoomWallSquare(GameOfCluedo.CONSERVATORY); break;
@@ -73,15 +83,15 @@ public class Board {
 		case 'H' : sq = new RoomWallSquare(GameOfCluedo.HALL); break;
 		case 'G' : sq = new RoomWallSquare(GameOfCluedo.LOUNGE); break;
 		case 'D' : sq = new RoomWallSquare(GameOfCluedo.DINING_ROOM); break;
-		case 'k' : sq = new RoomSquare(GameOfCluedo.KITCHEN, this); break;
-		case 'b' : sq = new RoomSquare(GameOfCluedo.BALL_ROOM, this); break;
-		case 'c' : sq = new RoomSquare(GameOfCluedo.CONSERVATORY, this); break;
-		case 'p' : sq = new RoomSquare(GameOfCluedo.BILLIARD_ROOM, this); break;
-		case 'l' : sq = new RoomSquare(GameOfCluedo.LIBRARY, this); break;
-		case 's' : sq = new RoomSquare(GameOfCluedo.STUDY, this); break;
-		case 'h' : sq = new RoomSquare(GameOfCluedo.HALL, this); break;
-		case 'g' : sq = new RoomSquare(GameOfCluedo.LOUNGE, this); break;
-		case 'd' : sq = new RoomSquare(GameOfCluedo.DINING_ROOM, this); break;
+		case 'k' : sq = new RoomSquare(GameOfCluedo.KITCHEN); break;
+		case 'b' : sq = new RoomSquare(GameOfCluedo.BALL_ROOM); break;
+		case 'c' : sq = new RoomSquare(GameOfCluedo.CONSERVATORY); break;
+		case 'p' : sq = new RoomSquare(GameOfCluedo.BILLIARD_ROOM); break;
+		case 'l' : sq = new RoomSquare(GameOfCluedo.LIBRARY); break;
+		case 's' : sq = new RoomSquare(GameOfCluedo.STUDY); break;
+		case 'h' : sq = new RoomSquare(GameOfCluedo.HALL); break;
+		case 'g' : sq = new RoomSquare(GameOfCluedo.LOUNGE); break;
+		case 'd' : sq = new RoomSquare(GameOfCluedo.DINING_ROOM); break;
 		}
 		return sq;
 	}
@@ -102,27 +112,10 @@ public class Board {
 		return title;
 	}
 	
-//	/**
-//	 * Creates a queue containing the PlayerType at each player
-//	 * start position, in the order that they will be parsed.
-//	 * @return A queue containing the PlayerType at each player
-//	 * start position, in the order that they will be parsed.
-//	 */
-//	private Queue<String> startPlayers(){
-//		Queue<String> players = new LinkedList<String>();
-//		players.add(GameOfCluedo.WHITE);
-//		players.add(GameOfCluedo.GREEN);
-//		players.add(GameOfCluedo.PEACOCK);
-//		players.add(GameOfCluedo.MUSTARD);
-//		players.add(GameOfCluedo.PLUM);
-//		players.add(GameOfCluedo.SCARLETT);
-//		return players;
-//	}
-	
 	/**
-	 * Creates a queue containing the RoomType at each shortcut
+	 * Creates a queue containing the room at each shortcut
 	 * location, in the order that they will be parsed.
-	 * @return A queue containing the RoomType at each shortcut
+	 * @return A queue containing the room at each shortcut
 	 * location, in the order that they will be parsed.
 	 */
 	private Queue<String> shortcutRooms(){
@@ -135,7 +128,7 @@ public class Board {
 	}
 	
 	/**
-	 * Make a copy of the board
+	 * Make a copy of the board.
 	 * @return A new 2D array referencing all the same Squares as
 	 * the board field.
 	 */
@@ -150,7 +143,7 @@ public class Board {
 	}
 	
 	/**
-	 * 'Draws' the board on the console.
+	 * Displays the board on the console.
 	 */
 	public void draw(List<Player> players){
 		// replace squares for player positions
@@ -195,7 +188,7 @@ public class Board {
 	}
 	
 	/**
-	 * Returns the square at the given position
+	 * Returns the square at the given position.
 	 * @param row The row of the desired square
 	 * @param col The column of the desired square
 	 * @return The Square at board[row][col]
@@ -203,14 +196,4 @@ public class Board {
 	public Square squareAt(int row, int col){
 		return board[row][col];
 	}
-	
-//	public static void main(String[] args){
-//		new BoardDrawer().drawBoard();
-//		File f = new File("boardFile.txt");
-//		Board b = new Board();
-//		b.parse(f);
-//		Queue<Player> players = new LinkedList<Player>();
-//		players.offer(new Player("Miss Scarlett", '1'));
-//		b.draw(players);
-//	}
 }

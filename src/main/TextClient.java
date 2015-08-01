@@ -41,7 +41,6 @@ public class TextClient {
 		}
 		LinkedList<Player> players = inputPlayers(nplayers); // all players
 		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
-		game.setPlayers(players);
 		game.dealCards(players);
 	
 		// begin the game
@@ -55,7 +54,7 @@ public class TextClient {
 			System.out.println(player.getName() + " rolls " + roll + ".");
 			TextHelpers.waitToContinue();
 			// display player's options
-			playerOptions(player, playersInGame, game, roll);
+			playerOptions(player, players, playersInGame, game, roll);
 			// move player to end of queue
 			if(playersInGame.contains(player)){
 				playersInGame.remove(player);
@@ -114,12 +113,13 @@ public class TextClient {
 	/**
 	 * Provides the player with all possible actions they may take.
 	 * @param player The player whose turn it is.
+	 * @param players All players
 	 * @param playersInGame The players still in the game
 	 * @param game The current game of Cluedo
 	 * @param roll The number rolled by the dice.
 	 */
-	private static void playerOptions(Player player, LinkedList<Player> playersInGame,
-			GameOfCluedo game, int roll) {
+	private static void playerOptions(Player player, LinkedList<Player> players,
+			LinkedList<Player> playersInGame, GameOfCluedo game, int roll) {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
@@ -130,7 +130,7 @@ public class TextClient {
 			int pr = player.row();
 			int pc = player.column();
 			Square sq = board.squareAt(pr, pc);
-			game.drawBoard();
+			game.drawBoard(playersInGame);
 			
 			System.out.println();
 			System.out.println(i +" turns remaining");
@@ -184,7 +184,7 @@ public class TextClient {
 			case ("H") : case("h") : viewHand(player); i++; break;
 			case ("C") : case("c") : viewCardsSeen(player); i++; break;
 			case ("A") : case("a") : makeAccusation(player, playersInGame, game); break outer;
-			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
+			case ("M") : case("m") : makeSuggestion(player, players, game); endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
 			}
 		}
@@ -315,7 +315,7 @@ public class TextClient {
 			LinkedList<Player> playersInGame, GameOfCluedo game) {
 		while(true){
 			if(playersInGame.contains(player)){
-				game.drawBoard();
+				game.drawBoard(playersInGame);
 				System.out.println();
 				System.out.println("0 turns remaining");
 				List<String> options = new ArrayList<String>(); // stores options available
@@ -377,10 +377,11 @@ public class TextClient {
 	 * Prompts the player to enter a character, weapon and room and
 	 * checks whether the named cards are in any player's hands.
 	 * If so, adds them to the seen cards of the players
-	 * @param game The game being played
 	 * @param player The current player
+	 * @param players All players
+	 * @param game The game being played
 	 */
-	private static void makeSuggestion(Player player, GameOfCluedo game) {
+	private static void makeSuggestion(Player player, List<Player> players, GameOfCluedo game) {
 		System.out.println();
 		System.out.println("Suggest a character, weapon and room:");
 		System.out.println();
@@ -395,7 +396,7 @@ public class TextClient {
 		System.out.println();
 		
 		// iterate over players' hands to find a matching card
-		for (Player otherPlayer : game.getPlayers()){
+		for (Player otherPlayer : players){
 			if (otherPlayer != player){
 				for (Card c : otherPlayer.getHand()){
 					String cardName = c.getName();

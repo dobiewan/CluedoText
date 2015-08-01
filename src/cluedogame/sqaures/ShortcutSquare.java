@@ -3,12 +3,22 @@ package cluedogame.sqaures;
 import cluedogame.Board;
 import cluedogame.GameOfCluedo;
 
+/**
+ * Represents a 'secret passage' on the board.
+ * @author Sarah Dobie, Chris Read
+ *
+ */
 public class ShortcutSquare extends Square {
 	
-	private String toRoom;
+	private String toRoom; // the room the shortcut goes to
 	private int toRow; // the row this shortcut goes to
 	private int toCol; // the col this shortcut goes to
 	
+	/**
+	 * Constructor for class ShortcutSquare.
+	 * @param toRoom The room the shortcut goes to
+	 * @param board The board the shortcut is on
+	 */
 	public ShortcutSquare(String toRoom, Board board){
 		super(true);
 		this.toRoom = toRoom;
@@ -20,7 +30,7 @@ public class ShortcutSquare extends Square {
 	 * Finds the row of the shortcut in the given room
 	 * @param room The room with the shortcut
 	 * @return The row of the shortcut in the given room,
-	 * or -1 if there is no 
+	 * or -1 if there is none.
 	 */
 	private static int findRow(String room) {
 		switch(room){
@@ -35,7 +45,8 @@ public class ShortcutSquare extends Square {
 	/**
 	 * Finds the column of the shortcut in the given room
 	 * @param room The room with the shortcut
-	 * @return The column of the shortcut in the given room.
+	 * @return The column of the shortcut in the given room, or
+	 * -1 if there is none.
 	 */
 	private static int findCol(String room) {
 		switch(room){

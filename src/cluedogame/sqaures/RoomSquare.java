@@ -5,23 +5,21 @@ import cluedogame.*;
 
 /**
  * Represents a room which a player may enter.
- * @author Sarah
+ * @author Sarah Dobie, Chris Read.
  *
  */
 public class RoomSquare extends Square {
 	
 	String room;
-//	ShortcutSquare shortcut; // the shortcut square in this room, or null if there is none
 	
-	public RoomSquare(String room, Board board){
+	/**
+	 * Constructor for class RoomSquare.
+	 * @param room The room being represented
+	 */
+	public RoomSquare(String room){
 		super(true);
 		this.room = room;
-//		this.shortcut = findShortcut(room, board);
 	}
-	
-//	public ShortcutSquare shortcut(){
-//		return shortcut;
-//	}
 	
 //	/**
 //	 * Finds the shortcut square for the given room.
