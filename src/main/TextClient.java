@@ -53,9 +53,9 @@ public class TextClient {
 			TextHelpers.waitToContinue();
 			int roll = dice.nextInt(10) + 2;
 			System.out.println(player.getName() + " rolls a " + roll + ".");
+			TextHelpers.waitToContinue();
 			// display player's options
 			playerOptions(player, playersInGame, game, roll);
-			// TODO escape from loop when correct accusation made
 			// move player to end of queue
 			if(playersInGame.contains(player)){
 				playersInGame.remove(player);
@@ -178,8 +178,8 @@ public class TextClient {
 			case ("R") : case("r") : player.moveRight(); break;
 			case ("U") : case("u") : player.moveUp(); break;
 			case ("D") : case("d") : player.moveDown(); break;
-			case ("H") : case("h") : TextHelpers.printList(player.getHandStrings()); i++; break;
-			case ("C") : case("c") : TextHelpers.printList(player.getCardsSeenStrings()); i++; break;
+			case ("H") : case("h") : viewHand(player); i++; break;
+			case ("C") : case("c") : viewCardsSeen(player); i++; break;
 			case ("A") : case("a") : makeAccusation(player, playersInGame, game); break outer;
 			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
@@ -188,6 +188,7 @@ public class TextClient {
 		
 		if(!gameOver){
 			endOfTurnOptions(player, playersInGame, game);
+			System.out.println();
 		}
 	}
 
@@ -324,29 +325,64 @@ public class TextClient {
 	 */
 	private static void endOfTurnOptions(Player player,
 			LinkedList<Player> playersInGame, GameOfCluedo game) {
-		if(playersInGame.contains(player)){
-			game.drawBoard();
-			System.out.println();
-			System.out.println("0 turns remaining");
-			List<String> options = new ArrayList<String>(); // stores options available
-			
-			// option to make accusation
-			System.out.println("A : Make an accusation");
-			options.add("A");
-	
-			System.out.println("E: End turn");
-			options.add("E");
-			
-			String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
-			// check input is valid
-			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
-				choice = TextHelpers.inputString("Invalid input. Please try again.");
-			}
-			
-			switch(choice){
-			case ("A") : case("a") : makeAccusation(player, playersInGame, game);
+		while(true){
+			if(playersInGame.contains(player)){
+				game.drawBoard();
+				System.out.println();
+				System.out.println("0 turns remaining");
+				List<String> options = new ArrayList<String>(); // stores options available
+				
+				// option to look at player hand
+				System.out.println("H : View hand");
+				options.add("H");
+				
+				// option to look at all cards player has seen
+				System.out.println("C : View all cards seen");
+				options.add("C");
+				
+				// option to make accusation
+				System.out.println("A : Make an accusation");
+				options.add("A");
+		
+				System.out.println("E: End turn");
+				options.add("E");
+				
+				String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
+				// check input is valid
+				while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
+					choice = TextHelpers.inputString("Invalid input. Please try again.");
+				}
+				
+				switch(choice){
+				case ("H") : case("h") : viewHand(player); break;
+				case ("C") : case("c") : viewCardsSeen(player); break;
+				case ("A") : case("a") : makeAccusation(player, playersInGame, game); return;
+				case ("E") : case("e") : return;
+				}
+				
+				System.out.println();
 			}
 		}
+	}
+
+	/**
+	 * Displays all the cards in the player's hand.
+	 * @param player The player whose turn it is.
+	 */
+	private static void viewHand(Player player) {
+		System.out.println();
+		TextHelpers.printList(player.getHandStrings());
+		TextHelpers.waitToContinue();
+	}
+
+	/**
+	 * Displays all cards the player has seen.
+	 * @param player The player whose turn it is.
+	 */
+	private static void viewCardsSeen(Player player) {
+		System.out.println();
+		TextHelpers.printList(player.getCardsSeenStrings());
+		TextHelpers.waitToContinue();
 	}
 
 	/**
@@ -371,14 +407,14 @@ public class TextClient {
 		System.out.println();
 		
 		// iterate over players' hands to find a matching card
-		for (Player p : game.getPlayers()){
-			if (p != player){
-				for (Card c : p.getHand()){
+		for (Player otherPlayer : game.getPlayers()){
+			if (otherPlayer != player){
+				for (Card c : otherPlayer.getHand()){
 					String cardName = c.getName();
 					if ((cardName.equals(character) || cardName.equals(weapon) || cardName.equals(room))
-							&& !p.hasSeenCard(c)){
-						System.out.println(p.getName() + " has the card: " + cardName); //FIXME players get to choose card to show
-						p.addCardSeen(c);
+							&& !player.hasSeenCard(c)){
+						System.out.println(otherPlayer.getName() + " has the card: " + cardName); //FIXME players get to choose card to show
+						player.addCardSeen(c);
 						return;
 					}
 				}

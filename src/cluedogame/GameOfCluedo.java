@@ -153,19 +153,19 @@ public class GameOfCluedo {
 		while(!characterCards.isEmpty()){
 			Player p = dealTo.poll();
 			p.addCard(characterCards.remove(0));
-			dealTo.add(p);
+			dealTo.add(p); // put player on end of queue
 		}
 		// deal weapon cards
 		while(!weaponCards.isEmpty()){
 			Player p = dealTo.poll();
 			p.addCard(weaponCards.remove(0));
-			dealTo.add(p);
+			dealTo.add(p); // put player on end of queue
 		}
 		// deal room cards
 		while(!roomCards.isEmpty()){
 			Player p = dealTo.poll();
 			p.addCard(roomCards.remove(0));
-			dealTo.add(p);
+			dealTo.add(p); // put player on end of queue
 		}
 	}
 	
