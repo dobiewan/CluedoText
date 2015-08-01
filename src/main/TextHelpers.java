@@ -37,6 +37,8 @@ public class TextHelpers {
 				return Integer.parseInt(v);
 			} catch (IOException e) {
 				System.out.println("Please enter a number.");
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter a number.");
 			}
 		}
 	}
@@ -227,13 +229,13 @@ public class TextHelpers {
 	 */
 	static String selectCharacter(){
 		// Display options for the player to select a character
-		TextHelpers.printList(TextClient.simpleCharacters);
-		String character = TextHelpers.inputString("Enter the character's name: ");
-		character = TextHelpers.simpleToFullName(character);
+		printList(TextClient.simpleCharacters);
+		String character = inputString("Enter the character's name: ");
+		character = simpleToFullName(character);
 		// check for invalid character
 		while (character == ""){
-			character = TextHelpers.inputString("Invalid input - please try again: ");
-			character = TextHelpers.simpleToFullName(character);
+			character = inputString("Invalid input - please try again: ");
+			character = simpleToFullName(character);
 		}
 		return character;
 	}
@@ -244,12 +246,12 @@ public class TextHelpers {
 	 */
 	static String selectWeapon(){
 		// Display options for the player to select a weapon
-		TextHelpers.printList(TextClient.weapons);
-		String weapon = TextHelpers.inputString("Enter the weapon: ");
-		weapon = TextHelpers.simpleToFullWeapon(weapon);
+		printList(TextClient.weapons);
+		String weapon = inputString("Enter the weapon: ");
+		weapon = simpleToFullWeapon(weapon);
 		while (weapon == ""){
-			weapon = TextHelpers.inputString("Invalid input - please try again: ");
-			weapon = TextHelpers.simpleToFullWeapon(weapon);
+			weapon = inputString("Invalid input - please try again: ");
+			weapon = simpleToFullWeapon(weapon);
 		}
 		return weapon;
 	}
@@ -260,14 +262,27 @@ public class TextHelpers {
 	 */
 	static String selectRoom(){
 		// Display options for the player to select a room
-		TextHelpers.printList(TextClient.rooms);
-		String room = TextHelpers.inputString("Enter the room: ");
-		room = TextHelpers.simpleToFullRoom(room);
+		printList(TextClient.rooms);
+		String room = inputString("Enter the room: ");
+		room = simpleToFullRoom(room);
 		while (room == ""){
-			room = TextHelpers.inputString("Invalid input - please try again: ");
-			room = TextHelpers.simpleToFullRoom(room);
+			room = inputString("Invalid input - please try again: ");
+			room = simpleToFullRoom(room);
 		}
 		return room;
+	}
+	
+	/**
+	 * Prints an end of game message
+	 */
+	static void gameOver(){
+		System.out.println("*******************");
+		System.out.println("**   GAME OVER   **");
+		System.out.println("**               **");
+		System.out.println("**   Thanks for  **");
+		System.out.println("**    playing!   **");
+		System.out.println("**               **");
+		System.out.println("*******************");
 	}
 	
 }

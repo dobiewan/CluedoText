@@ -114,7 +114,7 @@ public class GameOfCluedo {
 	 */
 	public boolean accuse(String[] accusation){
 		for (int i = 0; i < murderCards.length; i++){
-			if (!accusation[i].equals(murderCards[i])){
+			if (!accusation[i].equals(murderCards[i].getName())){
 				return false;
 			}
 		}

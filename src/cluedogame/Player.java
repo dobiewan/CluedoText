@@ -171,6 +171,20 @@ public class Player {
 		
 	}
 	
+	/**
+	 * Sets the player's position to the given row and col if they
+	 * are within bounds.
+	 * @param row The player's new row
+	 * @param col The player's new column
+	 */
+	public void setPos(int row, int col){
+		if(row >= 0 && row < Board.ROWS
+				&& col >= 0 && col < Board.COLS){
+			this.rPosition = row;
+			this.cPosition = col;
+		}
+	}
+	
 	public void addCard(Card c){
 		hand.add(c);
 		cardsSeen.add(c);

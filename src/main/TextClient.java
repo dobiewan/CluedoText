@@ -18,6 +18,7 @@ public class TextClient {
 	static ArrayList<String> simpleCharacters;
 	static ArrayList<String> weapons;
 	static ArrayList<String> rooms;
+	static boolean gameOver = false;
 	
 	/**
 	 * Main method to run the game
@@ -25,8 +26,8 @@ public class TextClient {
 	 */
 	public static void main(String args[]) {
 		GameOfCluedo game = new GameOfCluedo();
-		Boolean gameOver = false;
 		TextHelpers.setup();
+		game.printMurder();
 	
 		// Print banner
 		System.out.println("*** Cluedo Version 1.0 ***");
@@ -47,12 +48,13 @@ public class TextClient {
 		Random dice = new Random();
 		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
 			Player player = playersInGame.peek();
+			System.out.println();
 			System.out.println(player.getName() +"'s turn!");
 			TextHelpers.waitToContinue();
 			int roll = dice.nextInt(10) + 2;
 			System.out.println(player.getName() + " rolls a " + roll + ".");
 			// display player's options
-			playerOptions(player, playersInGame, game, roll, gameOver);
+			playerOptions(player, playersInGame, game, roll);
 			// TODO escape from loop when correct accusation made
 			// move player to end of queue
 			if(playersInGame.contains(player)){
@@ -69,7 +71,9 @@ public class TextClient {
 			TextHelpers.waitToContinue();
 			System.out.println();
 			game.printMurder();
+			System.out.println();
 		}
+		TextHelpers.gameOver();
 	}
 
 	/**
@@ -114,7 +118,7 @@ public class TextClient {
 	 * @param roll The number rolled by the dice.
 	 */
 	private static void playerOptions(Player player, LinkedList<Player> playersInGame,
-			GameOfCluedo game, int roll, Boolean gameOver) {
+			GameOfCluedo game, int roll) {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
@@ -124,6 +128,7 @@ public class TextClient {
 			List<String> options = new ArrayList<String>(); // stores options available
 			int pr = player.row();
 			int pc = player.column();
+			Square sq = board.squareAt(pr, pc);
 			game.drawBoard();
 			
 			System.out.println();
@@ -146,8 +151,15 @@ public class TextClient {
 			options.add("A");
 			
 			// check if the currrent square is a room
-			if(board.squareAt(pr, pc) instanceof RoomSquare){
+			if(sq instanceof RoomSquare){
 				roomOptions(board, options, pr, pc);
+			}
+			
+			// check for a shortcut
+			if(sq instanceof ShortcutSquare){
+				ShortcutSquare shortcut = (ShortcutSquare)sq;
+				System.out.println("S : Take a shortcut to "+ shortcut.toRoom());
+				options.add("S");
 			}
 			
 			System.out.println();
@@ -168,12 +180,15 @@ public class TextClient {
 			case ("D") : case("d") : player.moveDown(); break;
 			case ("H") : case("h") : TextHelpers.printList(player.getHandStrings()); i++; break;
 			case ("C") : case("c") : TextHelpers.printList(player.getCardsSeenStrings()); i++; break;
-			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver); break outer;
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game); break outer;
 			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
-			case ("S") : case("s") : takeShortcut(player); endTurn = true; break;
+			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
 			}
 		}
-		endOfTurnOptions(player, playersInGame, game, gameOver);
+		
+		if(!gameOver){
+			endOfTurnOptions(player, playersInGame, game);
+		}
 	}
 
 	/**
@@ -189,19 +204,15 @@ public class TextClient {
 		// player can make a suggestion if in a room
 		System.out.println("M : Make an accusatory suggestion");
 		options.add("M");
-		
-		//TODO leave room(?)
-		
-		// check for a shortcut in the room
-		if(sq.shortcut() != null){
-			System.out.println("S : Take a shortcut");
-			options.add("S");
-		}
 	}
 
-	private static void takeShortcut(Player player) {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Moves the player to the other end of the shortcut
+	 * @param player The player to move
+	 * @param sq The shortcut they are taking
+	 */
+	private static void takeShortcut(Player player, ShortcutSquare sq) {
+		player.setPos(sq.toRow(), sq.toCol());
 	}
 
 	/**
@@ -310,12 +321,13 @@ public class TextClient {
 	 * @param player The player whose turn it is
 	 * @param playersInGame The players still in the game
 	 * @param game The game being played
-	 * @param gameOver Whether the game is over (will always be true initially)
 	 */
 	private static void endOfTurnOptions(Player player,
-			LinkedList<Player> playersInGame, GameOfCluedo game,
-			Boolean gameOver) {
+			LinkedList<Player> playersInGame, GameOfCluedo game) {
 		if(playersInGame.contains(player)){
+			game.drawBoard();
+			System.out.println();
+			System.out.println("0 turns remaining");
 			List<String> options = new ArrayList<String>(); // stores options available
 			
 			// option to make accusation
@@ -332,7 +344,7 @@ public class TextClient {
 			}
 			
 			switch(choice){
-			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver);
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game);
 			}
 		}
 	}
@@ -385,7 +397,7 @@ public class TextClient {
 	 * @param game
 	 */
 	private static void makeAccusation(Player player, LinkedList<Player> playersInGame,
-			GameOfCluedo game, Boolean gameOver) {
+			GameOfCluedo game) {
 		// Print ominous message
 		System.out.println();
 		System.out.println("This is serious business... One of us could be the murderer!");
@@ -402,6 +414,8 @@ public class TextClient {
 		if (game.accuse(accusation)){
 			// player made a correct accusation and won the game
 			System.out.println("You are correct!");
+			TextHelpers.waitToContinue();
+			System.out.println();
 			game.printMurder();
 			gameOver = true;
 		} else {
@@ -413,4 +427,6 @@ public class TextClient {
 			System.out.println();
 		}
 	}
+	
+	
 }

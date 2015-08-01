@@ -30,18 +30,7 @@ public class RoomSquare extends Square {
 	 * @return The ShortcutSquare in the given room, or null if there
 	 * is none.
 	 */
-	public static ShortcutSquare findShortcut(String room, Board board){ //FIXME equals not ==
-//		if(room.equals(GameOfCluedo.KITCHEN)){
-//			return (ShortcutSquare)board.squareAt(2, 4);
-//		} else if(room.equals(GameOfCluedo.STUDY)){
-//			return (ShortcutSquare)board.squareAt(21, 22);
-//		} else if(room.equals(GameOfCluedo.LOUNGE)){
-//			return (ShortcutSquare)board.squareAt(20, 1);
-//		} else if(room.equals(GameOfCluedo.CONSERVATORY)){
-//			return (ShortcutSquare)board.squareAt(4, 22);
-//		} else {
-//			return null;
-//		}
+	public static ShortcutSquare findShortcut(String room, Board board){
 		switch(room){
 		case GameOfCluedo.KITCHEN : return (ShortcutSquare)board.squareAt(2, 4);
 		case GameOfCluedo.STUDY : return (ShortcutSquare)board.squareAt(21, 22);
@@ -51,20 +40,10 @@ public class RoomSquare extends Square {
 		}
 	}
 	
+	
+	
 	@Override
 	public char boardChar() {
-//		switch(this.room){
-//		case KITCHEN : return 'k';
-//		case BALLROOM : return 'b';
-//		case CONSERVATORY : return 'c';
-//		case BILLIARD_ROOM : return 'p';
-//		case LIBRARY : return 'l';
-//		case STUDY : return 's';
-//		case HALL : return 'h';
-//		case LOUNGE : return 'g';
-//		case DINING_ROOM : return 'd';
-//		default : return ' ';
-//		}
 		return '_';
 	}
 
