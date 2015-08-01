@@ -127,9 +127,7 @@ public class TextClient {
 		// go until it's no longer the player's turn
 		outer: for(int i=roll; i>0 && !endTurn; i--){
 			List<String> options = new ArrayList<String>(); // stores options available
-			int pr = player.row();
-			int pc = player.column();
-			Square sq = board.squareAt(pr, pc);
+			Square sq = board.squareAt(player.row(), player.column());
 			game.drawBoard(playersInGame);
 			
 			System.out.println();
@@ -137,7 +135,7 @@ public class TextClient {
 			System.out.println("Options:");
 			
 			// check the directions the player can move in
-			movementOptions(board, pr, pc, options);
+			movementOptions(board, player, options);
 			
 			// option to look at player hand
 			System.out.println("H : View hand");
@@ -212,97 +210,31 @@ public class TextClient {
 	 * @param playerCol The player's current column position
 	 * @param options The list of options currently available to the player
 	 */
-	private static void movementOptions(Board board, int playerRow,
-			int playerCol, List<String> options) {
+	private static void movementOptions(Board board, Player player,
+			List<String> options) {
 		// left
-		if(canMoveLeft(playerRow, playerCol, board)){
+		if(player.canMoveLeft(board)){
 			System.out.println("L : Move left");
 			options.add("L");
 		}
 		// right
-		if(canMoveRight(playerRow, playerCol, board)){
+		if(player.canMoveRight(board)){
 			System.out.println("R : Move right");
 			options.add("R");
 		}
 		// up
-		if(canMoveUp(playerRow, playerCol, board)){
+		if(player.canMoveUp(board)){
 			System.out.println("U : Move up");
 			options.add("U");
 		}
 		// down
-		if(canMoveDown(playerRow, playerCol, board)){
+		if(player.canMoveDown(board)){
 			System.out.println("D : Move down");
 			options.add("D");
 		}
 	}
 
-	/**
-	 * Returns true if the player can move left.
-	 * @param playerRow The player's current row position
-	 * @param playerCol The player's current column position
-	 * @param board The board being played on
-	 * @return True if the square to the left of the player can be
-	 * stepped on; false otherwise.
-	 */
-	private static boolean canMoveLeft(int playerRow, int playerCol, Board board){
-		try{
-			Square leftSquare = board.squareAt(playerRow, playerCol-1);
-			return leftSquare.isSteppable();
-		} catch(ArrayIndexOutOfBoundsException e){
-			return false;
-		}
-	}
-
-	/**
-	 * Returns true if the player can move right.
-	 * @param playerRow The player's current row position
-	 * @param playerCol The player's current column position
-	 * @param board The board being played on
-	 * @return True if the square to the right of the player can be
-	 * stepped on; false otherwise.
-	 */
-	private static boolean canMoveRight(int playerRow, int playerCol, Board board){
-		try {
-			Square rightSquare = board.squareAt(playerRow, playerCol+1);
-			return rightSquare.isSteppable();
-		} catch(ArrayIndexOutOfBoundsException e){
-			return false;
-		}
-	}
 	
-	/**
-	 * Returns true if the player can move up.
-	 * @param playerRow The player's current row position
-	 * @param playerCol The player's current column position
-	 * @param board The board being played on
-	 * @return True if the square to the up of the player can be
-	 * stepped on; false otherwise.
-	 */
-	private static boolean canMoveUp(int playerRow, int playerCol, Board board){
-		try {
-			Square upSquare = board.squareAt(playerRow-1, playerCol);
-			return upSquare.isSteppable();
-		} catch(ArrayIndexOutOfBoundsException e){
-			return false;
-		}
-	}
-	
-	/**
-	 * Returns true if the player can move down.
-	 * @param playerRow The player's current row position
-	 * @param playerCol The player's current column position
-	 * @param board The board being played on
-	 * @return True if the square to the down of the player can be
-	 * stepped on; false otherwise.
-	 */
-	private static boolean canMoveDown(int playerRow, int playerCol, Board board){
-		try {
-			Square downSquare = board.squareAt(playerRow+1, playerCol);
-			return downSquare.isSteppable();
-		} catch(ArrayIndexOutOfBoundsException e){
-			return false;
-		}
-	}	
 
 	/**
 	 * Options available to the player if they have used up all the moves

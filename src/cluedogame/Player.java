@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cluedogame.cards.*;
+import cluedogame.sqaures.Square;
 
 /**
  * Represents a player in a game of Cluedo.
@@ -132,7 +133,65 @@ public class Player {
 		case GameOfCluedo.PLUM : return 19;
 		default : return -1;
 		}
+	}/**
+	 * Returns true if the player can move left.
+	 * @param board The board being played on
+	 * @return True if the square to the left of the player can be
+	 * stepped on; false otherwise.
+	 */
+	public boolean canMoveLeft(Board board){
+		try{
+			Square leftSquare = board.squareAt(rPosition, cPosition-1);
+			return leftSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
 	}
+
+	/**
+	 * Returns true if the player can move right.
+	 * @param board The board being played on
+	 * @return True if the square to the right of the player can be
+	 * stepped on; false otherwise.
+	 */
+	public boolean canMoveRight(Board board){
+		try {
+			Square rightSquare = board.squareAt(rPosition, cPosition+1);
+			return rightSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move up.
+	 * @param board The board being played on
+	 * @return True if the square to the up of the player can be
+	 * stepped on; false otherwise.
+	 */
+	public boolean canMoveUp(Board board){
+		try {
+			Square upSquare = board.squareAt(rPosition-1, cPosition);
+			return upSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns true if the player can move down.
+	 * @param board The board being played on
+	 * @return True if the square to the down of the player can be
+	 * stepped on; false otherwise.
+	 */
+	public boolean canMoveDown(Board board){
+		try {
+			Square downSquare = board.squareAt(rPosition+1, cPosition);
+			return downSquare.isSteppable();
+		} catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+	}	
 
 	/**
 	 * Moves the player character left one space on the game board.
