@@ -245,7 +245,7 @@ public class TextClient {
 	 * @param game The game being played
 	 */
 	private static void endOfTurnOptions(Player player,
-			LinkedList<Player> playersInGame, GameOfCluedo game) {
+			List<Player> playersInGame, GameOfCluedo game) {
 		while(true){
 			if(playersInGame.contains(player)){
 				game.drawBoard(playersInGame);
@@ -355,7 +355,7 @@ public class TextClient {
 	 * @param player The player making the accusation
 	 * @param game The game being played
 	 */
-	private static void makeAccusation(Player player, LinkedList<Player> playersInGame,
+	private static void makeAccusation(Player player, List<Player> playersInGame,
 			GameOfCluedo game) {
 		// Print ominous message
 		System.out.println();
