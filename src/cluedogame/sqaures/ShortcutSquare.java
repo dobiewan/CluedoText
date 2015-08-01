@@ -58,14 +58,29 @@ public class ShortcutSquare extends Square {
 		}
 	}
 
+	/**
+	 * Gets the room this shortcut goes to.
+	 * @return The name of the room at the other end of
+	 * this shortcut.
+	 */
 	public String toRoom(){
 		return this.toRoom;
 	}
 
+	/**
+	 * Gets the row this shortcut leads to.
+	 * @return The row of the square at the other end of
+	 * this shortcut.
+	 */
 	public int toRow() {
 		return toRow;
 	}
 
+	/**
+	 * Gets the column this shortcut leads to.
+	 * @return The column of the square at the other end of
+	 * this shortcut.
+	 */
 	public int toCol() {
 		return toCol;
 	}
