@@ -45,6 +45,7 @@ public class GameOfCluedo {
 	private List<Card> roomCards;
 	private List<Card> weaponCards;
 	private Card[] murderCards = new Card[3];
+	List<Player> players;
 	private Board board;
 	
 	/**
@@ -121,7 +122,7 @@ public class GameOfCluedo {
 	 * until there are no cards left.
 	 * @param players The players in the game.
 	 */
-	public void dealCards(List<Player> players) {
+	public void dealCards() {
 		Queue<Player> dealTo = new LinkedList<Player>();
 		dealTo.addAll(players);
 		// deal character cards
@@ -180,6 +181,22 @@ public class GameOfCluedo {
 	 */
 	public Board getBoard(){
 		return board;
+	}
+
+	/**
+	 * Adds all players to game.
+	 * @param players The complete list of players in the game.
+	 */
+	public void setPlayers(List<Player> players){
+		this.players = players;
+	}
+
+	/**
+	 * Gets all players in the game.
+	 * @return A list of all players in the game.
+	 */
+	public List<Player> getPlayers(){
+		return this.players;
 	}
 	
 }

@@ -40,8 +40,9 @@ public class TextClient {
 			nplayers = TextHelpers.inputNumber("There must be 2-6 players. Try again: ");
 		}
 		LinkedList<Player> players = inputPlayers(nplayers); // all players
+		game.setPlayers(players);
 		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
-		game.dealCards(players);
+		game.dealCards();
 	
 		// begin the game
 		Random dice = new Random();
@@ -54,7 +55,7 @@ public class TextClient {
 			System.out.println(player.getName() + " rolls " + roll + ".");
 			TextHelpers.waitToContinue();
 			// display player's options
-			playerOptions(player, players, playersInGame, game, roll);
+			playerOptions(player, playersInGame, game, roll);
 			// move player to end of queue
 			if(playersInGame.contains(player)){
 				playersInGame.remove(player);
@@ -118,7 +119,7 @@ public class TextClient {
 	 * @param game The current game of Cluedo
 	 * @param roll The number rolled by the dice.
 	 */
-	private static void playerOptions(Player player, LinkedList<Player> players,
+	private static void playerOptions(Player player,
 			LinkedList<Player> playersInGame, GameOfCluedo game, int roll) {
 		System.out.println();
 		Board board = game.getBoard();
@@ -182,7 +183,7 @@ public class TextClient {
 			case ("H") : case("h") : viewHand(player); i++; break;
 			case ("C") : case("c") : viewCardsSeen(player); i++; break;
 			case ("A") : case("a") : makeAccusation(player, playersInGame, game); break outer;
-			case ("M") : case("m") : makeSuggestion(player, players, game); endTurn = true; break;
+			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
 			}
 		}
@@ -313,7 +314,7 @@ public class TextClient {
 	 * @param players All players
 	 * @param game The game being played
 	 */
-	private static void makeSuggestion(Player player, List<Player> players, GameOfCluedo game) {
+	private static void makeSuggestion(Player player, GameOfCluedo game) {
 		System.out.println();
 		System.out.println("Suggest a character, weapon and room:");
 		System.out.println();
@@ -328,7 +329,7 @@ public class TextClient {
 		System.out.println();
 		
 		// iterate over players' hands to find a matching card
-		for (Player otherPlayer : players){
+		for (Player otherPlayer : game.getPlayers()){
 			if (otherPlayer != player){
 				for (Card c : otherPlayer.getHand()){
 					String cardName = c.getName();
@@ -336,6 +337,7 @@ public class TextClient {
 							&& !player.hasSeenCard(c)){
 						System.out.println(otherPlayer.getName() + " has the card: " + cardName); //FIXME players get to choose card to show
 						player.addCardSeen(c);
+						TextHelpers.waitToContinue();
 						return;
 					}
 				}
@@ -374,6 +376,7 @@ public class TextClient {
 			TextHelpers.waitToContinue();
 			System.out.println();
 			game.printMurder();
+			System.out.println();
 			gameOver = true;
 		} else {
 			// accusation was incorrect, insult player
