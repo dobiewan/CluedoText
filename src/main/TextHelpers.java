@@ -8,6 +8,11 @@ import java.util.List;
 
 import cluedogame.GameOfCluedo;
 
+/**
+ * Some helper methods for the TextClient class.
+ * @author Sarah
+ *
+ */
 public class TextHelpers {
 
 	/**
@@ -50,6 +55,18 @@ public class TextHelpers {
 				System.out.println("There's been an error. Please try again.");
 			}
 		}
+	}
+	
+	/**
+	 * Returns the given string with the first letter capitalised
+	 * @param s
+	 * @return
+	 */
+	static String capitalise(String s){
+		Character firstLetter = s.charAt(0);
+		Character.toUpperCase(firstLetter);
+		Character uppercase = (Character)(Character.toUpperCase(firstLetter));
+		return s.replaceFirst(firstLetter.toString(), uppercase.toString());
 	}
 	
 	/**
@@ -144,18 +161,18 @@ public class TextHelpers {
 	static String simpleToFullName(String name){
 		switch(name){
 		case GameOfCluedo.SCARLETT:
-		case "Scarlett" : return GameOfCluedo.SCARLETT;
+		case "Scarlett" : case "scarlett" : return GameOfCluedo.SCARLETT;
 		case GameOfCluedo.MUSTARD:
-		case "Mustard" : return GameOfCluedo.MUSTARD;
+		case "Mustard" : case "mustard" : return GameOfCluedo.MUSTARD;
 		case GameOfCluedo.WHITE:
-		case "White" : return GameOfCluedo.WHITE;
+		case "White" : case "white" : return GameOfCluedo.WHITE;
 		case GameOfCluedo.GREEN:
 		case "Reverend Green":
-		case "Green" : return GameOfCluedo.GREEN;
+		case "Green" : case "green" : return GameOfCluedo.GREEN;
 		case GameOfCluedo.PEACOCK:
-		case "Peacock" : return GameOfCluedo.PEACOCK;
+		case "Peacock" : case "peacock" : return GameOfCluedo.PEACOCK;
 		case GameOfCluedo.PLUM:
-		case "Plum" : return GameOfCluedo.PLUM;
+		case "Plum" : case "plum" : return GameOfCluedo.PLUM;
 		default : return "";
 		}
 		

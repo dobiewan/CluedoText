@@ -20,6 +20,59 @@ public class TextClient {
 	static ArrayList<String> rooms;
 	
 	/**
+	 * Main method to run the game
+	 * @param args
+	 */
+	public static void main(String args[]) {
+		GameOfCluedo game = new GameOfCluedo();
+		Boolean gameOver = false;
+		TextHelpers.setup();
+	
+		// Print banner
+		System.out.println("*** Cluedo Version 1.0 ***");
+		System.out.println("By Chris Read and Sarah Dobie, 2015");
+	
+		// input player info
+		int nplayers = TextHelpers.inputNumber("How many players?");
+		while(nplayers < 2 || nplayers > 6){
+			nplayers = TextHelpers.inputNumber("There must be 2-6 players. Try again: ");
+		}
+		LinkedList<Player> players = inputPlayers(nplayers); // all players
+		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
+		game.setPlayers(players);
+		game.dealCards(players);
+	
+		// begin the game
+		int turn = 1;
+		Random dice = new Random();
+		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
+			Player player = playersInGame.peek();
+			System.out.println(player.getName() +"'s turn!");
+			TextHelpers.waitToContinue();
+			int roll = dice.nextInt(10) + 2;
+			System.out.println(player.getName() + " rolls a " + roll + ".");
+			// display player's options
+			playerOptions(player, playersInGame, game, roll, gameOver);
+			// TODO escape from loop when correct accusation made
+			// move player to end of queue
+			if(playersInGame.contains(player)){
+				playersInGame.remove(player);
+				playersInGame.add(player);
+			}
+		}
+		// everyone's out and nobody made a correct accusation
+		if(playersInGame.size() == 0){
+			System.out.println("You didn't find the murderer!");
+			System.out.println("Luckily the police are more onto it than you lot!");
+			System.out.println();
+			System.out.println("Do you want to know who did it and how?");
+			TextHelpers.waitToContinue();
+			System.out.println();
+			game.printMurder();
+		}
+	}
+
+	/**
 	 * Collect player details from user input
 	 */
 	private static LinkedList<Player> inputPlayers(int nplayers) {
@@ -29,29 +82,31 @@ public class TextClient {
 		// list characters to choose from
 		System.out.println("The characters you may choose from are:");
 		TextHelpers.printList(characters);
-
+	
 		LinkedList<Player> players = new LinkedList<Player>();
-
+	
 		// ask each player for details
 		for (int i = 1; i <= nplayers; i++) {
 			String chosenCharacter = TextHelpers.inputString("Player #" + i + " character?");
 			// check validity of character
-			if (!characters.contains(chosenCharacter)) {
+			while (!characters.contains(chosenCharacter) &&
+					!characters.contains(TextHelpers.capitalise(chosenCharacter))) {
 				System.out.print("That's not a valid character. Please choose one of: ");
 				TextHelpers.printList(characters);
 				System.out.println();
 				// ask again
-				chosenCharacter = TextHelpers.inputString("Player #" + i + " token?");
-				chosenCharacter = TextHelpers.simpleToFullName(chosenCharacter);
+				chosenCharacter = TextHelpers.inputString("Player #" + i + " character?");
+//				chosenCharacter = TextHelpers.simpleToFullName(chosenCharacter);
 			}
 			
 			characters.remove(chosenCharacter); // the chosen character is no longer available
+			characters.remove(TextHelpers.capitalise(chosenCharacter));
 			chosenCharacter = TextHelpers.simpleToFullName(chosenCharacter);
 			players.add(new Player(chosenCharacter, Character.forDigit(i, 10))); // create the Player object
 		}
 		return players;
 	}
-	
+
 	/**
 	 * Provides the player with all possible actions they may take.
 	 * @param player The player whose turn it is.
@@ -59,7 +114,7 @@ public class TextClient {
 	 * @param roll The number rolled by the dice.
 	 */
 	private static void playerOptions(Player player, LinkedList<Player> playersInGame,
-			GameOfCluedo game, int roll, boolean gameOver) {
+			GameOfCluedo game, int roll, Boolean gameOver) {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
@@ -122,37 +177,7 @@ public class TextClient {
 	}
 
 	/**
-	 * @param player
-	 * @param playersInGame
-	 * @param game
-	 * @param gameOver
-	 */
-	private static void endOfTurnOptions(Player player,
-			LinkedList<Player> playersInGame, GameOfCluedo game,
-			boolean gameOver) {
-		if(playersInGame.contains(player)){
-			List<String> options = new ArrayList<String>(); // stores options available
-			
-			// option to make accusation
-			System.out.println("A : Make an accusation");
-			options.add("A");
-
-			System.out.println("E: End turn");
-			options.add("E");
-			
-			String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
-			// check input is valid
-			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
-				choice = TextHelpers.inputString("Invalid input. Please try again.");
-			}
-			
-			switch(choice){
-			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver);
-			}
-		}
-	}
-
-	/**
+	 * Extra player options if the player is in a room.
 	 * @param board
 	 * @param options
 	 * @param playerRow
@@ -172,6 +197,11 @@ public class TextClient {
 			System.out.println("S : Take a shortcut");
 			options.add("S");
 		}
+	}
+
+	private static void takeShortcut(Player player) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -205,7 +235,7 @@ public class TextClient {
 			options.add("D");
 		}
 	}
-	
+
 	/**
 	 * Returns true if the player can move left.
 	 * @param playerRow The player's current row position
@@ -222,7 +252,7 @@ public class TextClient {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Returns true if the player can move right.
 	 * @param playerRow The player's current row position
@@ -273,6 +303,39 @@ public class TextClient {
 			return false;
 		}
 	}	
+
+	/**
+	 * Options available to the player if they have used up all the moves
+	 * in their dice roll.
+	 * @param player The player whose turn it is
+	 * @param playersInGame The players still in the game
+	 * @param game The game being played
+	 * @param gameOver Whether the game is over (will always be true initially)
+	 */
+	private static void endOfTurnOptions(Player player,
+			LinkedList<Player> playersInGame, GameOfCluedo game,
+			Boolean gameOver) {
+		if(playersInGame.contains(player)){
+			List<String> options = new ArrayList<String>(); // stores options available
+			
+			// option to make accusation
+			System.out.println("A : Make an accusation");
+			options.add("A");
+	
+			System.out.println("E: End turn");
+			options.add("E");
+			
+			String choice = TextHelpers.inputString("What will "+player.getName()+" do?");
+			// check input is valid
+			while(!options.contains(choice) && !options.contains(choice.toUpperCase())){
+				choice = TextHelpers.inputString("Invalid input. Please try again.");
+			}
+			
+			switch(choice){
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game, gameOver);
+			}
+		}
+	}
 
 	/**
 	 * Prompts the player to enter a character, weapon and room and
@@ -348,58 +411,6 @@ public class TextClient {
 			System.out.println();
 			System.out.println(player.getName() +" is out of the game!");
 			System.out.println();
-		}
-	}
-
-	private static void takeShortcut(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public static void main(String args[]) {
-		GameOfCluedo game = new GameOfCluedo();
-		Boolean gameOver = false;
-		TextHelpers.setup();
-	
-		// Print banner
-		System.out.println("*** Cluedo Version 1.0 ***");
-		System.out.println("By Chris Read and Sarah Dobie, 2015");
-	
-		// input player info
-		int nplayers = TextHelpers.inputNumber("How many players?");
-		while(nplayers < 2 || nplayers > 6){
-			nplayers = TextHelpers.inputNumber("There must be 2-6 players. Try again: ");
-		}
-		LinkedList<Player> players = inputPlayers(nplayers); // all players
-		LinkedList<Player> playersInGame = (LinkedList<Player>) players.clone(); //players still in game
-		game.setPlayers(players);
-		game.dealCards(players);
-	
-		// begin the game
-		int turn = 1;
-		Random dice = new Random();
-		while (!gameOver && playersInGame.size() > 0) { // loop as long as the game is playing
-			Player player = playersInGame.peek();
-			System.out.println(player.getName() +"'s turn!");
-			TextHelpers.waitToContinue();
-			int roll = dice.nextInt(10) + 2;
-			System.out.println(player.getName() + " rolls a " + roll + ".");
-			// display player's options
-			playerOptions(player, playersInGame, game, roll, gameOver);
-			// TODO escape from loop when correct accusation made
-			// move player to end of queue
-			playersInGame.remove(player);
-			playersInGame.add(player);
-		}
-		// everyone's out and nobody made a correct accusation
-		if(playersInGame.size() == 0){
-			System.out.println("You didn't find the murderer!");
-			System.out.println("Luckily the police are more onto it than you lot!");
-			System.out.println();
-			System.out.println("Do you want to know who did it and how?");
-			TextHelpers.waitToContinue();
-			System.out.println();
-			game.printMurder();
 		}
 	}
 }

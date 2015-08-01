@@ -125,9 +125,9 @@ public class GameOfCluedo {
 	 * Prints out the murderer, their weapon and room.
 	 */
 	public void printMurder(){
-		System.out.println(murderCards[0] +
-				" used the " + murderCards[1] +
-				" in the " + murderCards[2] + "!");
+		System.out.println(murderCards[0].getName() +
+				" used the " + murderCards[1].getName() +
+				" in the " + murderCards[2].getName() + "!");
 	}
 	
 	public Board getBoard(){
