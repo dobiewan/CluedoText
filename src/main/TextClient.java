@@ -28,7 +28,7 @@ public class TextClient {
 	public static void main(String args[]) {
 		GameOfCluedo game = new GameOfCluedo();
 		TextHelpers.setup();
-		game.printMurder();
+//		game.printMurder();
 	
 		// Print banner
 		System.out.println("*** Cluedo Version 1.0 ***");
@@ -335,7 +335,7 @@ public class TextClient {
 					String cardName = c.getName();
 					if ((cardName.equals(character) || cardName.equals(weapon) || cardName.equals(room))
 							&& !player.hasSeenCard(c)){
-						System.out.println(otherPlayer.getName() + " has the card: " + cardName); //FIXME players get to choose card to show
+						System.out.println(otherPlayer.getName() + " has the card: " + cardName);
 						player.addCardSeen(c);
 						TextHelpers.waitToContinue();
 						return;

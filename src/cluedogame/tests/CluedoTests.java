@@ -23,6 +23,10 @@ import static org.junit.Assert.*;
 
 public class CluedoTests {
 
+	/**
+	 * These three tests check that the game state is set up
+	 * correctly, for the players, cards and board state respectively.
+	 */
 	@Test
 	public void testPlayerSetup(){
 		GameOfCluedo game = new GameOfCluedo();
@@ -32,12 +36,11 @@ public class CluedoTests {
 	}
 	
 	@Test
-	public void testCardSetup(){
+	public void testCardDealSetup(){
 		GameOfCluedo game = new GameOfCluedo();
 		List<Player> players = makePlayers(6);
 		game.setPlayers(players);
 		game.dealCards();
-		game.printMurder();
 		players = game.getPlayers();
 		for (Player p : players){
 			assertFalse(p.getHandStrings().isEmpty());
@@ -53,12 +56,17 @@ public class CluedoTests {
 		assertTrue(board.squareAt(2, 2) instanceof RoomSquare);
 	}
 	
+	/**
+	 * These two tests check that correct and 
+	 * incorrect accusations resolve correctly.
+	 */
 	@Test
 	public void testFalseAccuse(){
 		GameOfCluedo game = new GameOfCluedo();
 		List<Player> players = makePlayers(4);
 		game.setPlayers(players);
 		game.dealCards();
+		game.printMurder();
 		Card card = players.get(2).getHand().get(0);
 		String[] accusation = new String[3];
 		assertFalse(card == null);
@@ -89,8 +97,12 @@ public class CluedoTests {
 		assertTrue(game.accuse(accusation));
 	}
 	
+	/**
+	 * Tests whether a player correctly stores a card he/she has seen 
+	 * in several situations
+	 */
 	@Test
-	public void testPlayerSeenCards(){
+	public void testPlayerCardStrings(){
 		GameOfCluedo game = new GameOfCluedo();
 		List<Player> players = makePlayers(3);
 		game.setPlayers(players);
@@ -100,6 +112,20 @@ public class CluedoTests {
 		assertFalse(p.getHand().isEmpty());
 		for (int i = 0; i < p.getHand().size(); i++){
 			assertTrue(p.getHandStrings().get(i).equals(p.getCardsSeenStrings().get(i)));
+		}
+	}
+	
+	@Test
+	public void testPlayerHasSeenHand(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(3);
+		game.setPlayers(players);
+		game.dealCards();
+		
+		Player p = players.get(1);
+		assertFalse(p.getHand().isEmpty());
+		for (Card c : p.getHand()){
+			assertTrue(p.hasSeenCard(c));
 		}
 	}
 	
@@ -118,7 +144,33 @@ public class CluedoTests {
 	}
 	
 	@Test
-	public void testPlayerCanMove(){
+	public void testPlayerSuggest(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(5);
+		game.setPlayers(players);
+		game.dealCards();
+		
+		Player p1 = players.get(1);
+		Player p2 = players.get(2);
+		Card card = p2.getHand().get(0);
+		String cardName = card.getName();
+		outer: for (Player p : players){
+			for (Card c : p.getHand()){
+				if (c.getName().equals(cardName)){
+					p1.addCardSeen(c);
+					break outer;
+				}
+			}
+		}
+		assertTrue(p1.hasSeenCard(card));
+	}
+	
+	/**
+	 * This group tests the canMove methods of the Player class,
+	 * also tests the failure states
+	 */
+	@Test
+	public void testPlayerCanMoveUp(){
 		GameOfCluedo game = new GameOfCluedo();
 		List<Player> players = makePlayers(2);
 		game.setPlayers(players);
@@ -126,30 +178,146 @@ public class CluedoTests {
 		Player p = game.getPlayers().get(0);
 		p.setPos(24, 7);
 		assertTrue(p.canMoveUp(board));
-		assertFalse(p.canMoveLeft(board));
-		assertFalse(p.canMoveRight(board));
-		assertFalse(p.canMoveDown(board));
-		p.moveUp();
-		assertTrue(p.canMoveDown(board));
 	}
 	
 	@Test
-	public void testPlayerMovement(){
+	public void testPlayerCantMoveUp(){
 		GameOfCluedo game = new GameOfCluedo();
 		List<Player> players = makePlayers(2);
 		game.setPlayers(players);
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
-		p.setPos(24, 7);
+		p.setPos(0, 0);
+		assertFalse(p.canMoveUp(board));
+	}
+	
+	@Test
+	public void testPlayerCanMoveDown(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(23, 7);
+		assertTrue(p.canMoveDown(board));
+	}
+	
+	@Test
+	public void testPlayerCantMoveDown(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(24, 1);
+		assertFalse(p.canMoveDown(board));
+	}
+	
+	@Test
+	public void testPlayerCanMoveLeft(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(22, 8);
+		assertTrue(p.canMoveLeft(board));
+	}
+	
+	@Test
+	public void testPlayerCantMoveLeft(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(0, 0);
+		assertFalse(p.canMoveLeft(board));
+	}
+	
+	@Test
+	public void testPlayerCanMoveRight(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(22, 7);
+		assertTrue(p.canMoveRight(board));
+	}
+	
+	@Test
+	public void testPlayerCantMoveRight(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(2, 23);
+		assertFalse(p.canMoveRight(board));
+	}
+
+	
+	/**
+	 * This next group of tests works on the Player.move methods,
+	 * checking that the destinations for each move are as expected.
+	 */
+	@Test
+	public void testMoveUp(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(23, 7);
 		p.moveUp();
-		p.moveRight();
-		p.moveUp();
-		p.moveLeft();
+		assertTrue(p.column() == 7);
+		assertTrue(p.row() == 22);
+	}
+	
+	@Test
+	public void testMoveDown(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(23, 7);
 		p.moveDown();
+		assertTrue(p.column() == 7);
+		assertTrue(p.row() == 24);
+	}
+	
+	@Test
+	public void testMoveLeft(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(23, 8);
+		p.moveLeft();
 		assertTrue(p.column() == 7);
 		assertTrue(p.row() == 23);
 	}
 	
+	@Test
+	public void testMoveRight(){
+		GameOfCluedo game = new GameOfCluedo();
+		List<Player> players = makePlayers(2);
+		game.setPlayers(players);
+		Board board = game.getBoard();
+		Player p = game.getPlayers().get(0);
+		p.setPos(23, 7);
+		p.moveRight();
+		assertTrue(p.column() == 8);
+		assertTrue(p.row() == 23);
+	}
+	
+	/**
+	 * These next two methods check that shortcuts are correctly initialised,
+	 * and that they respond correctly when an invalid shortcut is set up.
+	 */
 	@Test
 	public void testShortcutCreationFail(){
 		GameOfCluedo game = new GameOfCluedo();
@@ -169,28 +337,6 @@ public class CluedoTests {
 		assertTrue(shortcut.toCol() == 22);
 		assertTrue(shortcut.toRow() == 21);
 	}
-	
-//	@Test
-//	public void testTextClient(){
-//		TextClient client = new TextClient();
-//		Method[] methods = client.getClass().getMethods();
-//		// client.main(null);  // need to invoke interior methods
-//	}
-//	
-//	@Test
-//	
-//	public void testTextHelpers(){
-//		TextHelpers helper = new TextHelpers();
-//		try {
-//			Method[] methods = helper.getClass().getMethods();
-//			methods[0].invoke(null);
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.out.println(e);
-//			fail();
-//		} 
-//	}
 	
 	/**
 	 * Creates an List of the specified number of players
