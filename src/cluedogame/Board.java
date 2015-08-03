@@ -183,6 +183,12 @@ public class Board {
 				// draw a wall
 				System.out.print("|");
 			}
+			// print characters that are on this row
+			for (Player p : players){
+				if (p.row() == r){
+					System.out.print(" <- " + p.getName());
+				}
+			}
 			System.out.println();
 		}
 	}

@@ -265,7 +265,7 @@ public class TextClient {
 				System.out.println("A : Make an accusation");
 				options.add("A");
 		
-				System.out.println("E: End turn");
+				System.out.println("E : End turn");
 				options.add("E");
 				
 				String choice = TextHelpers.inputString("What will "+player.getName()+" do?");

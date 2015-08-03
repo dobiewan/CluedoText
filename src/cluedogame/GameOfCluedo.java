@@ -160,6 +160,14 @@ public class GameOfCluedo {
 	}
 	
 	/**
+	 * Testing method used when checking a correct accusation
+	 * @return the murder cards
+	 */
+	public Card[] getMurderCards(){
+		return murderCards;
+	}
+	
+	/**
 	 * Prints out the murderer, their weapon and room.
 	 */
 	public void printMurder(){
