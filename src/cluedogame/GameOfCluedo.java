@@ -207,4 +207,19 @@ public class GameOfCluedo {
 		return this.players;
 	}
 	
+	/**
+	 * Determines whether there is a player at the given position.
+	 * @param row The row of the position
+	 * @param col The column of the position
+	 * @return True if and only if there is a player at the given position.
+	 */
+	public boolean hasPlayerAt(int row, int col){
+		for(Player p : players){
+			if(p.row() == row && p.column() == col){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

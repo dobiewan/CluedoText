@@ -177,7 +177,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(24, 7);
-		assertTrue(p.canMoveUp(board));
+		assertTrue(p.canMoveUp(board, game));
 	}
 	
 	@Test
@@ -188,7 +188,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(0, 0);
-		assertFalse(p.canMoveUp(board));
+		assertFalse(p.canMoveUp(board, game));
 	}
 	
 	@Test
@@ -199,7 +199,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(23, 7);
-		assertTrue(p.canMoveDown(board));
+		assertTrue(p.canMoveDown(board, game));
 	}
 	
 	@Test
@@ -210,7 +210,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(24, 1);
-		assertFalse(p.canMoveDown(board));
+		assertFalse(p.canMoveDown(board, game));
 	}
 	
 	@Test
@@ -221,7 +221,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(22, 8);
-		assertTrue(p.canMoveLeft(board));
+		assertTrue(p.canMoveLeft(board, game));
 	}
 	
 	@Test
@@ -232,7 +232,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(0, 0);
-		assertFalse(p.canMoveLeft(board));
+		assertFalse(p.canMoveLeft(board, game));
 	}
 	
 	@Test
@@ -243,7 +243,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(22, 7);
-		assertTrue(p.canMoveRight(board));
+		assertTrue(p.canMoveRight(board, game));
 	}
 	
 	@Test
@@ -254,7 +254,7 @@ public class CluedoTests {
 		Board board = game.getBoard();
 		Player p = game.getPlayers().get(0);
 		p.setPos(2, 23);
-		assertFalse(p.canMoveRight(board));
+		assertFalse(p.canMoveRight(board, game));
 	}
 
 	

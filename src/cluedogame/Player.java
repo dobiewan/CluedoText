@@ -133,16 +133,20 @@ public class Player {
 		case GameOfCluedo.PLUM : return 19;
 		default : return -1;
 		}
-	}/**
+	}
+	
+	/**
 	 * Returns true if the player can move left.
 	 * @param board The board being played on
 	 * @return True if the square to the left of the player can be
 	 * stepped on; false otherwise.
 	 */
-	public boolean canMoveLeft(Board board){
+	public boolean canMoveLeft(Board board, GameOfCluedo game){
 		try{
-			Square leftSquare = board.squareAt(rPosition, cPosition-1);
-			return leftSquare.isSteppable();
+			int leftRow = rPosition;
+			int leftCol = cPosition-1;
+			Square leftSquare = board.squareAt(leftRow, leftCol);
+			return leftSquare.isSteppable() && !game.hasPlayerAt(leftRow, leftCol);
 		} catch(ArrayIndexOutOfBoundsException e){
 			return false;
 		}
@@ -154,10 +158,12 @@ public class Player {
 	 * @return True if the square to the right of the player can be
 	 * stepped on; false otherwise.
 	 */
-	public boolean canMoveRight(Board board){
+	public boolean canMoveRight(Board board, GameOfCluedo game){
 		try {
-			Square rightSquare = board.squareAt(rPosition, cPosition+1);
-			return rightSquare.isSteppable();
+			int rightRow = rPosition;
+			int rightCol = cPosition+1;
+			Square rightSquare = board.squareAt(rightRow, rightCol);
+			return rightSquare.isSteppable() && !game.hasPlayerAt(rightRow, rightCol);
 		} catch(ArrayIndexOutOfBoundsException e){
 			return false;
 		}
@@ -169,10 +175,12 @@ public class Player {
 	 * @return True if the square to the up of the player can be
 	 * stepped on; false otherwise.
 	 */
-	public boolean canMoveUp(Board board){
+	public boolean canMoveUp(Board board, GameOfCluedo game){
 		try {
-			Square upSquare = board.squareAt(rPosition-1, cPosition);
-			return upSquare.isSteppable();
+			int upRow = rPosition-1;
+			int upCol = cPosition;
+			Square upSquare = board.squareAt(upRow, upCol);
+			return upSquare.isSteppable() && !game.hasPlayerAt(upRow, upCol);
 		} catch(ArrayIndexOutOfBoundsException e){
 			return false;
 		}
@@ -184,10 +192,12 @@ public class Player {
 	 * @return True if the square to the down of the player can be
 	 * stepped on; false otherwise.
 	 */
-	public boolean canMoveDown(Board board){
+	public boolean canMoveDown(Board board, GameOfCluedo game){
 		try {
-			Square downSquare = board.squareAt(rPosition+1, cPosition);
-			return downSquare.isSteppable();
+			int downRow = rPosition+1;
+			int downCol = cPosition;
+			Square downSquare = board.squareAt(downRow, downCol);
+			return downSquare.isSteppable() && !game.hasPlayerAt(downRow, downCol);
 		} catch(ArrayIndexOutOfBoundsException e){
 			return false;
 		}

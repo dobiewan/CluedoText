@@ -136,7 +136,7 @@ public class TextClient {
 			System.out.println("Options:");
 			
 			// check the directions the player can move in
-			movementOptions(board, player, options);
+			movementOptions(board, player, options, game);
 			
 			// option to look at player hand
 			System.out.println("H : View hand");
@@ -182,7 +182,7 @@ public class TextClient {
 			case ("D") : case("d") : player.moveDown(); break;
 			case ("H") : case("h") : viewHand(player); i++; break;
 			case ("C") : case("c") : viewCardsSeen(player); i++; break;
-			case ("A") : case("a") : makeAccusation(player, playersInGame, game); break outer;
+			case ("A") : case("a") : makeAccusation(player, playersInGame, game); endTurn = true; break;
 			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
 			}
@@ -212,24 +212,24 @@ public class TextClient {
 	 * @param options The list of options currently available to the player
 	 */
 	private static void movementOptions(Board board, Player player,
-			List<String> options) {
+			List<String> options, GameOfCluedo game) {
 		// left
-		if(player.canMoveLeft(board)){
+		if(player.canMoveLeft(board, game)){
 			System.out.println("L : Move left");
 			options.add("L");
 		}
 		// right
-		if(player.canMoveRight(board)){
+		if(player.canMoveRight(board, game)){
 			System.out.println("R : Move right");
 			options.add("R");
 		}
 		// up
-		if(player.canMoveUp(board)){
+		if(player.canMoveUp(board, game)){
 			System.out.println("U : Move up");
 			options.add("U");
 		}
 		// down
-		if(player.canMoveDown(board)){
+		if(player.canMoveDown(board, game)){
 			System.out.println("D : Move down");
 			options.add("D");
 		}
@@ -246,8 +246,8 @@ public class TextClient {
 	 */
 	private static void endOfTurnOptions(Player player,
 			List<Player> playersInGame, GameOfCluedo game) {
-		while(true){
-			if(playersInGame.contains(player)){
+		if(playersInGame.contains(player)){
+			while(true){
 				game.drawBoard(playersInGame);
 				System.out.println();
 				System.out.println("0 turns remaining");
