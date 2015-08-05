@@ -38,7 +38,9 @@ public class RoomSquare extends Square {
 //		}
 //	}
 	
-	
+	public String getRoom(){
+		return room;
+	}
 	
 	@Override
 	public char boardChar() {

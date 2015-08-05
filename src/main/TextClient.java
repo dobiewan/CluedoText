@@ -249,6 +249,7 @@ public class TextClient {
 		if(playersInGame.contains(player)){
 			while(true){
 				game.drawBoard(playersInGame);
+				Square sq = game.getBoard().squareAt(player.row(), player.column());
 				System.out.println();
 				System.out.println("0 turns remaining");
 				List<String> options = new ArrayList<String>(); // stores options available
@@ -260,6 +261,12 @@ public class TextClient {
 				// option to look at all cards player has seen
 				System.out.println("C : View all cards seen");
 				options.add("C");
+				
+				// option to make a suggestion if player is in a room
+				if (sq instanceof RoomSquare){
+					System.out.println("M : Make an accusatory suggestion");
+					options.add("M");
+				}
 				
 				// option to make accusation
 				System.out.println("A : Make an accusation");
@@ -316,7 +323,10 @@ public class TextClient {
 	 */
 	private static void makeSuggestion(Player player, GameOfCluedo game) {
 		System.out.println();
-		System.out.println("Suggest a character, weapon and room:");
+		RoomSquare square = (RoomSquare)game.getBoard().squareAt(player.row(), player.column());
+		String room = square.getRoom();
+		System.out.println("You're in the " + room);
+		System.out.println("Suggest a character and weapon:");
 		System.out.println();
 		
 		String character = TextHelpers.selectCharacter();
@@ -325,8 +335,6 @@ public class TextClient {
 		String weapon = TextHelpers.selectWeapon();
 		System.out.println();
 		
-		String room = TextHelpers.selectRoom();
-		System.out.println();
 		
 		// iterate over players' hands to find a matching card
 		for (Player otherPlayer : game.getPlayers()){
