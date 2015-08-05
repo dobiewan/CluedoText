@@ -124,6 +124,7 @@ public class TextClient {
 		System.out.println();
 		Board board = game.getBoard();
 		boolean endTurn = false;
+		boolean suggested = false;
 		
 		// go until it's no longer the player's turn
 		outer: for(int i=roll; i>0 && !endTurn; i--){
@@ -183,13 +184,13 @@ public class TextClient {
 			case ("H") : case("h") : viewHand(player); i++; break;
 			case ("C") : case("c") : viewCardsSeen(player); i++; break;
 			case ("A") : case("a") : makeAccusation(player, playersInGame, game); endTurn = true; break;
-			case ("M") : case("m") : makeSuggestion(player, game); endTurn = true; break;
+			case ("M") : case("m") : makeSuggestion(player, game); suggested = true; endTurn = true; break;
 			case ("S") : case("s") : takeShortcut(player, (ShortcutSquare)sq); break;
 			}
 		}
 		
 		if(!gameOver){
-			endOfTurnOptions(player, playersInGame, game);
+			endOfTurnOptions(player, playersInGame, game, suggested);
 			System.out.println();
 		}
 	}
@@ -245,7 +246,7 @@ public class TextClient {
 	 * @param game The game being played
 	 */
 	private static void endOfTurnOptions(Player player,
-			List<Player> playersInGame, GameOfCluedo game) {
+			List<Player> playersInGame, GameOfCluedo game, Boolean suggested) {
 		if(playersInGame.contains(player)){
 			while(true){
 				game.drawBoard(playersInGame);
@@ -263,7 +264,7 @@ public class TextClient {
 				options.add("C");
 				
 				// option to make a suggestion if player is in a room
-				if (sq instanceof RoomSquare){
+				if (sq instanceof RoomSquare && !suggested){
 					System.out.println("M : Make an accusatory suggestion");
 					options.add("M");
 				}
@@ -284,6 +285,7 @@ public class TextClient {
 				switch(choice){
 				case ("H") : case("h") : viewHand(player); break;
 				case ("C") : case("c") : viewCardsSeen(player); break;
+				case ("M") : case("m") : makeSuggestion(player, game); return;
 				case ("A") : case("a") : makeAccusation(player, playersInGame, game); return;
 				case ("E") : case("e") : return;
 				}
